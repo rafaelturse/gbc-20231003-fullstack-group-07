@@ -17,9 +17,9 @@
 
 # Project
 - Download project using **"git clone https://github.com/rafaelturse/gbc-20231003-fullstack-group-07.git"**
-- then **"npm i"** to install the dependencies
-- to start project, try **"npx nodemon server.js"**
-- The project was divided in three mian parts,
+- Then **"npm i"** to install the dependencies
+- To start project, try **"npx nodemon server.js"**
+- The project was divided in three main parts,
   - **COSTUMER**
     - Pages
       - Main
@@ -32,3 +32,5 @@
     - Pages
       - Login
       - Delivery
+- One databases per project, so in the end we should make it works in only one, the final one
+- CSS Pallet: ?
