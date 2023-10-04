@@ -20,15 +20,15 @@
 - then **"npm i"** to install the dependencies
 - to start project, try **"npx nodemon server.js"**
 - The project was divided in three mian parts,
-  - COSTUMER
+  - **COSTUMER**
     - Pages
       - Main
       - Orders
       - Check Orders Status
-  - RESTAURANT
+  - **RESTAURANT**
     - Pages
       - Orders
-  - DRIVER
+  - **DRIVER**
     - Pages
       - Login
       - Delivery
