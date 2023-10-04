@@ -30,8 +30,8 @@
       - 2-1 - Orders (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/2-1-restaurant-order-management.png)
   - **DRIVER**
     - Pages
-      - 3-1 - Login
-      - 3-2 - Delivery
+      - 3-1 - Login (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/3-1-driver-login.png)
+      - 3-2 - Delivery (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/3-2-driver-orders.png)
 - One databases per project, so in the end we should make it works in only one, the final one
 - CSS
   - Collor Pallet: ?
