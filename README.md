@@ -22,9 +22,9 @@
 - The project was divided in three main parts,
   - **COSTUMER**
     - Pages
-      - Main
-      - Orders
-      - Check Orders Status
+      - Main (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/1-1-costumer-main.png)
+      - Orders (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/1-2-costumer-order.png)
+      - Check Orders Status (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/1-3-order-status-check.png)
   - **RESTAURANT**
     - Pages
       - Orders
