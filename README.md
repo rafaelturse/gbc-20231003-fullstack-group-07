@@ -20,7 +20,7 @@
 - Then **"npm i"** to install the dependencies
 - To start project, try **"npx nodemon server.js"**
 - The project was divided in three main parts,
-  - **COSTUMER**
+  - **CUSTOMER**
     - Pages
       - Main (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/1-1-costumer-main.png)
       - Orders (https://github.com/rafaelturse/gbc-20231003-fullstack-group-07/blob/main/assets/prototype/1-2-costumer-order.png)
