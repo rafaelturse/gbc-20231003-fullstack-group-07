@@ -4,8 +4,8 @@
 <br>
 
 # GIT Flow
-- Never work directly at **MAIN** branch
-- Create a branch in your name and work only on it
+- Never work directly at the **MAIN** branch
+- Use a branch in your name and work only on it
 - ALWAYS try a **"git pull origin main"** before starting working in your branch
 
 # GIT Branches
