@@ -33,4 +33,6 @@
       - Login
       - Delivery
 - One databases per project, so in the end we should make it works in only one, the final one
-- CSS Pallet: ?
+- CSS
+  - Collor Pallet: ?
+  - Fonts: ?
