@@ -6,7 +6,7 @@
 # GIT Flow
 - Never work directly at the **MAIN** branch
 - Use a branch in your name and work only on it
-- ALWAYS try **"git pull origin main"** before start working in your branch
+- ALWAYS try **"git pull origin main"** before starting work on your branch
 
 # GIT Branches
 - To find your branch, do not forget to **"git fetch"** before **checkout**
