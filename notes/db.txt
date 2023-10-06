@@ -1,0 +1,41 @@
+------------------------------------------------------------------------------------------
+db: gbc_restaurant_db
+user: rafaelturse
+password: hKraLVXBfE2Z1zx5
+------------------------------------------------------------------------------------------
+DB - collections
+    - customer_collections
+        - fullName: string
+        - delivery_address: string
+        - phone: int
+        - credit_card_Number: string
+    - driver_collections
+        - fullName: string
+        - license_plate: string
+        - phone: int
+        - username: string 
+        - password: string (not encrypted)
+    - restaurant_menu_collections
+        - photo: string (assets/img path only)
+        - name: string
+        - description: string
+        - price: double
+    - order_collections
+        - customer: customer
+        - driver: driver
+        - order_number: string (suggestion: 2023-XX)
+        - menu_item: restaurant_menu
+        - order_date: dateTime
+        - proof_photo: string (assets/img path only)
+        - order_status: string {
+            - RECEIVED: this means the order was received by the restaurant, but not prepared yet.
+            - READY FOR DELIVERY: the restaurant has finished preparing the order and is waiting for the delivery driver to pickup the order.
+            - IN TRANSIT: The delivery driver has picked up the order and is delivering it to the customer
+            - DELIVERED: The order is delivered to the customer
+            }
+------------------------------------------------------------------------------------------
+- driver_collections
+    [
+        {"fullname":"Rafael Turse", "license_plate":"rafa777", "phone":5471505471, "username":"rafaelturse", "password":"123"},
+        {"fullname":"Kratos", "license_plate":"krts123", "phone":1254785241, "username":"kratos", "password":"123"},
+    ]

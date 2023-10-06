@@ -13,11 +13,30 @@ const exphbs = require("express-handlebars")
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }))
 app.set("view engine", ".hbs")
 
+/* ########################################## */
+/* ### ACCESS ############################### */
+/* ########################################## */
+
 /* --- PORT --- */
 const HTTP_PORT = process.env.PORT || 8080
 
-/* --- ASSETS ACCESS --- */
+/* --- ASSETS --- */
 app.use(express.static("assets"))
+
+/* --- FORM --- */
+app.use(express.urlencoded({ extended: true }))
+
+/* ########################################## */
+/* ### MESSAGES ############################# */
+/* ########################################## */
+
+/* --- ACCESS --- */
+const ACTIVE_DB = "gbc_restaurant_db"
+const USERNAME = "rafaelturse"
+const PASSWORD = "qBnX8Z0RH96IP8Sg"
+/* --- GENERAL --- */
+const DATABASE_CONNECTED = `>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`
+const DATABASE_ERROR_TO_CONNECTED = `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`
 
 /* ########################################## */
 /* ### DB ################################### */
@@ -25,23 +44,28 @@ app.use(express.static("assets"))
 
 /* --- CONNECTION STRING --- */
 const mongoose = require('mongoose')
-const CONNECTION_STRING = ""
-
+const CONNECTION_STRING = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.h1rrj2i.mongodb.net/${ACTIVE_DB}?retryWrites=true&w=majority`
 mongoose.connect(CONNECTION_STRING)
 
-/* --- CHECK IF CONNECTION WAS SUCCESSFUL --- */
+/* --- CHECKING CONNECTION --- */
 const db = mongoose.connection
-db.on("error", console.error.bind(console, "Error connecting to database: "))
-db.once("open", () => { console.log("Mongo DB connected successfully.") })
+db.on("error", console.error.bind(console, DATABASE_ERROR_TO_CONNECTED))
+db.once("open", () => { console.log(DATABASE_CONNECTED) })
 
 /* ########################################## */
 /* ### ENDPOINTS ############################ */
 /* ########################################## */
 
-/* --- AUTHOR: [YOUR NAME] --- */
+/* --- CREATE --- */
 app.get(`/`, (req, res) => {
-   console.log("this is root")
+   console.log(">>> DEBUG: this is root")
 })
+
+/* --- READ --- */
+
+/* --- UPDATE --- */
+
+/* --- DELETE --- */
 
 /* ########################################## */
 /* ### SERVER START ######################### */
@@ -49,12 +73,9 @@ app.get(`/`, (req, res) => {
 
 /* --- START LOG --- */
 const onHTTPStart = () => {
-    console.log(`#######################################`)
-    console.log(`Server has ReadableStreamDefaultReader.`)
-    console.log(`Visit http://localhost:${HTTP_PORT}`)
-    console.log(`#######################################`)
-    console.log(`User CTRL + C to stop the server`)
-    console.log(`#######################################`)
+    console.log(`>>> DEBUG: Server has ReadableStreamDefaultReader.`)
+    console.log(`>>> DEBUG: Visit http://localhost:${HTTP_PORT}`)
+    console.log(`>>> DEBUG: User CTRL + C to stop the server`)
 }
 
 /* --- LISTEN --- */
