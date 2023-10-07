@@ -13,6 +13,17 @@ const exphbs = require("express-handlebars")
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }))
 app.set("view engine", ".hbs")
 
+/* --- MULTER --- */
+const multer = require("multer")
+const myStorage = multer.diskStorage({
+    destination: "assets/img/driver",
+    filename: function(req, file, cb){
+        cb(null , `${Date.now()}-driver-${path.extname(file.originalname)}`)
+    }
+})
+
+const upload = multer({storage: myStorage})
+
 /* ########################################## */
 /* ### ACCESS ############################### */
 /* ########################################## */
