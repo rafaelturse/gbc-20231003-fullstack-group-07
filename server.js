@@ -45,28 +45,13 @@ app.use(express.static("assets"))
 app.use(express.urlencoded({ extended: true }))
 
 /* ########################################## */
-/* ### MESSAGES ############################# */
+/* ### DB ################################### */
 /* ########################################## */
-
-const debug = (message) => { return `>>> DEBUG: ${message}` }
 
 /* --- ACCESS --- */
 const ACTIVE_DB = "gbc_restaurant_db"
 const USERNAME = "rafaelturse"
 const PASSWORD = "qBnX8Z0RH96IP8Sg"
-/* --- DATA BASE --- */
-const DATABASE_CONNECTED = `>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`
-const DATABASE_ERROR_TO_CONNECTED = `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`
-/* --- DEBUG --- */
-const CHECKING_LOGIN = ">>> DEBUG: driver login checking"
-const THIS_IS_DRIVERS = ">>> DEBUG: this is drivers' collection"
-const THIS_IS_LOGIN = ">>> DEBUG: this is driver login"
-const THIS_IS_ORDERS = ">>> DEBUG: this is orders' collection"
-const THIS_IS_ROOT = ">>> DEBUG: this is root, redirecting to driver login"
-
-/* ########################################## */
-/* ### DB ################################### */
-/* ########################################## */
 
 /* --- CONNECTION STRING --- */
 const mongoose = require('mongoose')
@@ -75,8 +60,8 @@ mongoose.connect(CONNECTION_STRING)
 
 /* --- CHECKING CONNECTION --- */
 const db = mongoose.connection
-db.on("error", console.error.bind(console, DATABASE_ERROR_TO_CONNECTED))
-db.once("open", () => { console.log(DATABASE_CONNECTED) })
+db.on("error", console.error.bind(console, `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`))
+db.once("open", () => { console.log(`>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`) })
 
 /* ########################################## */
 /* ### SCHEMA ############################### */
@@ -106,30 +91,63 @@ const orderSchema = new Schema({
 const Order = mongoose.model("order_collection", orderSchema)
 
 /* ########################################## */
+/* ### FUNCTIONS ############################ */
+/* ########################################## */
+
+const checkEmpty = (value)  => {
+    if (value !== undefined && value !== ""){
+        return true
+    }
+
+    return false
+}
+
+const ensureLogin = (req, res, next) => {
+    /*  
+        a middleware function to ensure that the user is 
+        logged in before they can access any page such as 
+        dashboard or profile or viewjobs
+    */
+
+    if (req.session.isLoggedIn !== undefined && 
+        req.session.isLoggedIn && 
+        req.session.user !== undefined){
+        //if user has logged in allow them to go to desired endpoint
+        next()
+    }else{
+        //otherwise, ask them to login first
+
+         return res.render("login", 
+            {errorMsg: "You must login first to access dashboard", 
+            layout: false})
+    }
+}
+
+/* ########################################## */
 /* ### TESTING ENDPOINTS #################### */
 /* ########################################## */
 
 app.get(`/testing-get-orders`, async (req, res) => {
-    console.log(THIS_IS_ORDERS)
+    console.log(">>> DEBUG: this is orders' collection")
 
     results = await Order.find().lean().exec()
 
-    console.log(debug(JSON.stringify(results)))
+    console.log(`>>> DEBUG: ${JSON.stringify(results)}`)
     console.log(results)
 
     res.send("")
- })
+})
 
 app.get(`/testing-get-drivers`, async (req, res) => {
-    console.log(THIS_IS_DRIVERS)
+    console.log(">>> DEBUG: this is drivers' collection")
 
     results = await Driver.find().lean().exec()
 
-    console.log(debug(JSON.stringify(results)))
+    console.log(`>>> DEBUG: ${JSON.stringify(results)}`)
     console.log(results)
 
     res.send("")
- })
+})
 
 /* ########################################## */
 /* ### HOT ENDPOINTS ######################## */
@@ -137,30 +155,101 @@ app.get(`/testing-get-drivers`, async (req, res) => {
 
 /* --- ROOT --- */
 app.get("/", (req, res) => {
-    console.log(THIS_IS_ROOT)
+    console.log(">>> DEBUG: this is root, redirecting to driver login")
 
     res.redirect("/login")
 })
 
-/* --- GET LOGIN --- */
+/* --- GET LOGIN PAGE --- */
 app.get("/login", (req, res) => {
-    console.log(THIS_IS_LOGIN)
+    console.log(">>> DEBUG: this is driver login")
 
-    res.render("header-template", { layout:"index" })
+    res.render("header-template", { layout:"login" })
 })
 
-/* --- CHECK LOGIN --- */
-app.post("/login", (req, res) => {
-    console.log(CHECKING_LOGIN)
+/* --- LOGIN VALIDATION --- */
+app.post("/login", async (req, res) => {
+    console.log(">>> DEBUG: driver login checking")
 
-   
+    const usernameFromUI = req.body.username
+    const passwordFromUI = req.body.password
+
+    //ERROR: if empty username or password
+    if (!checkEmpty(usernameFromUI) || !checkEmpty(passwordFromUI)) {
+        console.log(`>>> DEBUG: driver missing credentials:`)
+        console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`)
+
+        return res.render("header-template", {
+            layout: "login",
+            missingCredentialMessage: `
+                <strong>Missing Credentials!</strong> 
+                Please, reenter driver <strong>username</strong> or <strong>password</strong>.
+                `
+        })
+    } 
+
+    try {
+        //DB: driver search 
+        const results = await Driver.find({ username:usernameFromUI, password:passwordFromUI }).lean().exec()
+        
+        //ERROR: if driver not found
+        if (results.length === 0) {
+            console.log(`>>> DEBUG: driver not found! Please, contact ADMIN.`);
+            console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
+
+            return res.render("header-template", {
+                layout: "login",
+                missingCredentialMessage: `
+                    <strong>Driver not Found!</strong> 
+                    Please, reenter driver <strong>username</strong> and <strong>password</strong> 
+                    or <strong>contact ADMIN</strong>.
+                    ` 
+            })
+        } else {
+            //SUCCESS: driver found, redirecting to driver-orders page
+            console.log(`>>> DEBUG: user found!`);
+            console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
+
+            //SESSION IN
+            req.session.user = {
+                uname: usernameFromUI,
+                password: passwordFromUI,
+            }
+
+            req.session.isLoggedIn = true
+            req.session.username = usernameFromUI
+
+            res.redirect("/driver-orders")
+        }
+    } catch (error) {
+        console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`);
+        console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
+
+        return res.render("header-template", {
+            layout: "login",
+            missingCredentialMessage: `
+                Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
+                at this time, please, try again!
+                ` 
+        })
+    }
 })
 
-/* --- READ --- */
+/* --- LOGOUT --- */
+app.get("/logout", async (req, res) => {
+    console.log(">>> DEBUG: this is logout")
 
-/* --- UPDATE --- */
+    req.session.destroy()
+    
+    res.redirect("/login")
+})
 
-/* --- DELETE --- */
+/* --- GET DRIVER-ORDERS --- */
+app.get("/driver-orders", ensureLogin, async (req, res) => {
+    console.log(`>>> DEBUG: this is driver orders`);
+
+    return res.render("header-template", { layout:"driver-orders" })
+})
 
 /* ########################################## */
 /* ### SERVER START ######################### */

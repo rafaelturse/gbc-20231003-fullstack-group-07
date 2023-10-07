@@ -20,6 +20,12 @@
 
             <label class="field-label" for="password">Password</label>
             <input type="password" name="password" placeholder="Enter the driver Password">
+
+            {{#if missingCredentialMessage}}
+              <div class="error-container describe text-center">
+                {{{missingCredentialMessage}}}
+              </div>
+            {{/if}}
                 
             <button class="bg-blue" type="submit">LOG IN</button>
           </form>
