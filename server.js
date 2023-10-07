@@ -41,13 +41,20 @@ app.use(express.urlencoded({ extended: true }))
 /* ### MESSAGES ############################# */
 /* ########################################## */
 
+const debug = (message) => {
+    return `>>> DEBUG: ${message}`
+}
+
 /* --- ACCESS --- */
 const ACTIVE_DB = "gbc_restaurant_db"
 const USERNAME = "rafaelturse"
 const PASSWORD = "qBnX8Z0RH96IP8Sg"
-/* --- GENERAL --- */
+/* --- DATA BASE --- */
 const DATABASE_CONNECTED = `>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`
 const DATABASE_ERROR_TO_CONNECTED = `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`
+/* --- DEBUG --- */
+const THIS_IS_DRIVERS = ">>> DEBUG: this is drivers"
+const THIS_IS_ROOT = ">>> DEBUG: this is root"
 
 /* ########################################## */
 /* ### DB ################################### */
@@ -64,12 +71,41 @@ db.on("error", console.error.bind(console, DATABASE_ERROR_TO_CONNECTED))
 db.once("open", () => { console.log(DATABASE_CONNECTED) })
 
 /* ########################################## */
+/* ### SCHEMA ############################### */
+/* ########################################## */
+
+const Schema = mongoose.Schema
+
+/* --- DRIVER --- */
+const driverSchema = new Schema({
+    fullName:String, 
+    license_plate:String, 
+    phone:Number,
+    username:String,
+    password:String
+})
+const Driver = mongoose.model("driver_collection", driverSchema)
+
+/* ########################################## */
 /* ### ENDPOINTS ############################ */
 /* ########################################## */
 
+/* --- TESTING --- */
+app.get(`/testing-drivers`, async (req, res) => {
+    console.log(THIS_IS_DRIVERS)
+
+    results = await Driver.find().lean().exec()
+
+    console.log(debug(JSON.stringify(results)))
+    console.log(results)
+
+    res.send("")
+ })
+
 /* --- CREATE --- */
-app.get(`/`, (req, res) => {
-   console.log(">>> DEBUG: this is root")
+app.get("/", (req, res) => {
+   console.log(THIS_IS_ROOT)
+   res.send("")
 })
 
 /* --- READ --- */
