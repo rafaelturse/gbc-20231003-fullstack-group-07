@@ -6,7 +6,6 @@
 const express = require('express')
 const app = express()
 const path = require(`path`)
-app.use(express.urlencoded({ extended: true}))
 
 /* --- HANDLE BAR --- */
 const exphbs = require("express-handlebars")
@@ -49,9 +48,7 @@ app.use(express.urlencoded({ extended: true }))
 /* ### MESSAGES ############################# */
 /* ########################################## */
 
-const debug = (message) => {
-    return `>>> DEBUG: ${message}`
-}
+const debug = (message) => { return `>>> DEBUG: ${message}` }
 
 /* --- ACCESS --- */
 const ACTIVE_DB = "gbc_restaurant_db"
@@ -61,8 +58,9 @@ const PASSWORD = "qBnX8Z0RH96IP8Sg"
 const DATABASE_CONNECTED = `>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`
 const DATABASE_ERROR_TO_CONNECTED = `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`
 /* --- DEBUG --- */
-const THIS_IS_ORDERS = ">>> DEBUG: this is orders"
 const THIS_IS_DRIVERS = ">>> DEBUG: this is drivers"
+const THIS_IS_LOGIN = ">>> DEBUG: this is login"
+const THIS_IS_ORDERS = ">>> DEBUG: this is orders"
 const THIS_IS_ROOT = ">>> DEBUG: this is root"
 
 /* ########################################## */
@@ -109,7 +107,7 @@ const Order = mongoose.model("order_collection", orderSchema)
 /* ### TESTING ENDPOINTS #################### */
 /* ########################################## */
 
-app.get(`/testing-orders`, async (req, res) => {
+app.get(`/testing-get-orders`, async (req, res) => {
     console.log(THIS_IS_ORDERS)
 
     results = await Order.find().lean().exec()
@@ -120,7 +118,7 @@ app.get(`/testing-orders`, async (req, res) => {
     res.send("")
  })
 
-app.get(`/testing-drivers`, async (req, res) => {
+app.get(`/testing-get-drivers`, async (req, res) => {
     console.log(THIS_IS_DRIVERS)
 
     results = await Driver.find().lean().exec()
@@ -132,13 +130,21 @@ app.get(`/testing-drivers`, async (req, res) => {
  })
 
 /* ########################################## */
-/* ### ENDPOINTS ############################ */
+/* ### HOT ENDPOINTS ######################## */
 /* ########################################## */
 
-/* --- CREATE --- */
+/* --- ROOT --- */
 app.get("/", (req, res) => {
-   console.log(THIS_IS_ROOT)
-   res.send("")
+    console.log(THIS_IS_ROOT)
+
+    res.redirect("/login");
+});
+
+/* --- CREATE --- */
+app.get("/login", (req, res) => {
+    console.log(THIS_IS_LOGIN)
+
+    res.render("header-template", { layout:"index" })
 })
 
 /* --- READ --- */
