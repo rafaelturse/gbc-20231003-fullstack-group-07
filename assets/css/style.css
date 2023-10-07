@@ -27,7 +27,7 @@
     width: 30%;
 }
 
-#btn-log-out {
+.btn-task {
     border: none;
     cursor: pointer;
 
@@ -47,10 +47,8 @@ button:hover {
 /* --- COLOR --- */
 .bg-blue { background-color: #47abca; } 
 .bg-dark { background-color: #000; } 
-.bg-green { background-color: #47ca7b; } 
 
 .text-blue { color: #47abca !important; }
-.text-green { color: #47ca7b !important; }
 
 /* --- CONTAINER --- */
 .container {
@@ -99,7 +97,7 @@ button:hover {
 }
 
 .orders-container {
-border-radius: 20px;
+    border-radius: 20px;
     border: none;
 
     padding: 50px;
@@ -109,6 +107,15 @@ border-radius: 20px;
 }
 
 /* --- FIELDS --- */
+.form-task {
+    display: flex; 
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0px;
+    
+    width: 100%;
+}
+
 #form-login {
     border-radius: 20px;
     border: none;
@@ -172,13 +179,44 @@ input::placeholder {
 
 /* --- PAGE --- */
 body {
-    height: 200px;
     background-color: #040404;
     background-image: linear-gradient(#1c1c1c, #040404);
 
     font-family: 'Nunito', sans-serif;
     padding: 50px;
 }
+
+hr {
+    color:#fafafa;
+    width: 50%;
+}
+
+/* --- TABLE --- */
+table {
+    border-collapse: collapse;
+    width: 90%;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+  
+.tr-order-info:hover { 
+    background-color: #47abca; 
+    font-weight: bolder;
+}
+
+.tr-order-info:hover .table-button {
+    background-color: #040404; 
+}
+
+.tr-order-info:hover .table-text {
+    color: #040404; 
+}
+
+tr:nth-child(odd) { background-color: #111; }
 
 /* --- TEXT --- */
 .field-label {

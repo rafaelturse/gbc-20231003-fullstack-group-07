@@ -178,7 +178,7 @@ app.post("/login", async (req, res) => {
         return res.render("header-template", {
             layout: "login",
             message: `
-                ERROR: <strong>Missing Credentials!</strong> 
+                <strong>ERROR: Missing Credentials!</strong> 
                 Please, reenter driver <strong>username</strong> or <strong>password</strong>.
                 `
         })
@@ -186,7 +186,9 @@ app.post("/login", async (req, res) => {
 
     try {
         //DB: driver search 
-        const driver = await Driver.findOne({ username:usernameFromUI, password:passwordFromUI }).lean().exec()
+        const driver = await Driver.findOne(
+            { username:usernameFromUI, password:passwordFromUI }
+        ).lean().exec()
         
         //ERROR: if driver not found
         if (driver === null) {
@@ -196,14 +198,14 @@ app.post("/login", async (req, res) => {
             return res.render("header-template", {
                 layout: "login",
                 message: `
-                    ERROR: <strong>Driver not Found!</strong> 
+                    <strong>ERROR: Driver not Found!</strong> 
                     Please, reenter driver <strong>username</strong> and <strong>password</strong> 
                     or <strong>contact ADMIN</strong>.
                     ` 
             })
         } else {
             //SUCCESS: driver found, redirecting to driver-orders page
-            console.log(`>>> DEBUG: user found!`)
+            console.log(`>>> DEBUG: user: ${driver.username} successfully found.`)
             console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`)
 
             //SESSION IN
@@ -225,8 +227,8 @@ app.post("/login", async (req, res) => {
         return res.render("header-template", {
             layout: "login",
             message: `
-                ERROR: Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
-                at this time, please, try again!
+                <strong>ERROR:</strong> Unable to connect to 
+                database: <strong>${ACTIVE_DB}</strong> at this time, please, try again!
                 ` 
         })
     }
@@ -247,7 +249,9 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
 
     try {
         //DB: available orders search 
-        const orders = await Order.find({ order_status:"READY FOR DELIVERY", driver_assigned:"" }).lean().exec()
+        const orders = await Order.find(
+            { order_status:"READY FOR DELIVERY" }
+        ).lean().exec()
 
         //ALERT: if driver not found
         if (orders.length === 0) {
@@ -259,16 +263,27 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
                 license_plate: req.session.license_plate,
                 phone: req.session.phone,
                 username: req.session.username,
-                message: `ALERT: <strong>No Available Orders</strong>`
+                message: `<strong>ALERT:</strong> No Available Orders`
             })
-        } 
+        } else {
+            console.log(`>>> DEBUG: this is driver orders.`)
+
+            return res.render("header-template", {
+                layout: "driver-orders",
+                fullname: req.session.fullname,
+                license_plate: req.session.license_plate,
+                phone: req.session.phone,
+                username: req.session.username,
+                orders: orders
+            })
+        }
     } catch (error) {
         console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`)
 
         return res.render("header-template", {
             layout: "driver-orders",
             message: `
-                ERROR: Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
+                <strong>ERROR:</strong> Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
                 at this time, please, try again!
                 ` 
         })

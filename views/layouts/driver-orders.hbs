@@ -20,18 +20,54 @@
         <div>Username: <strong>{{username}}</strong></div>
 
         <form id="form-driver-info" action="/logout" method="get" >
-          <button id="btn-log-out" class="bg-blue" type="submit">LOG OUT</button>
+          <button class="btn-task bg-blue" type="submit">LOG OUT</button>
         </form>
       </div>
     </div>
+
+    <hr />
 
     <!-- ORDERS -->
     <div class="container">
       {{#if message}}
         <div class="alert-message describe text-center">{{{message}}}</div>
       {{else}}
-          <div class="bg-dark title-simple">
-
+          <div class="line-info-container-title bg-dark title-l text-center">Available Orders</div>
+          <div class="line-info-container bg-dark title-simple">
+            <table>
+                <tr class="title-simple">
+                  <th class="text-center">Assign To Me</th>
+                  <th class="text-center">Order Number</th>
+                  <th class="text-center">Food</th>
+                  <th class="text-center">Order Date</th>
+                  <th class="text-center">Order Status</th>
+                  <th class="text-center">Update Order Status</th>
+                  <th class="text-center">Proof Photo</th>
+                </tr>
+              {{#each orders}}
+                <tr class="tr-order-info describe">
+                  <td class="text-center">
+                    <form class="form-task" action="/" method="get" >
+                      <button class="btn-task table-button bg-blue" type="submit">ASSIGN</button>
+                    </form>
+                  </td>
+                  <td class="table-text text-center">{{this.order_number}}</td>
+                  <td class="table-text">{{this.menu_item}}</td>
+                  <td class="table-text text-center">{{this.order_date}}</td>
+                  <td class="table-text text-center">{{this.order_status}}</td>
+                  <td class="table-text text-center">
+                    <form class="form-task" action="/" method="get" >
+                      <button class="btn-task table-button bg-blue" type="submit">UPDATE</button>
+                    </form>
+                  </td>
+                  <td class="text-center">
+                    <form class="form-task" action="/" method="get" >
+                      <button class="btn-task table-button bg-blue" type="submit">UPDATE</button>
+                    </form>
+                  </td>
+                </tr>
+              {{/each}}
+            </table>
           </div>
       {{/if}}
     </div>
