@@ -1,5 +1,5 @@
 /* ########################################## */
-/* ### IMPORTS ############################## */
+/* ### SETUP ################################ */
 /* ########################################## */
 
 /* --- EXPRESS --- */
@@ -23,6 +23,14 @@ const myStorage = multer.diskStorage({
 })
 
 const upload = multer({storage: myStorage})
+
+/* --- SESSION --- */
+const session = require('express-session');
+app.use(session({
+    secret: 'gbc-restaurant', //any random string used for configuring the session
+    resave: false,
+    saveUninitialized: true
+}))
 
 /* ########################################## */
 /* ### ACCESS ############################### */
@@ -53,6 +61,7 @@ const PASSWORD = "qBnX8Z0RH96IP8Sg"
 const DATABASE_CONNECTED = `>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`
 const DATABASE_ERROR_TO_CONNECTED = `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`
 /* --- DEBUG --- */
+const THIS_IS_ORDERS = ">>> DEBUG: this is orders"
 const THIS_IS_DRIVERS = ">>> DEBUG: this is drivers"
 const THIS_IS_ROOT = ">>> DEBUG: this is root"
 
@@ -86,11 +95,31 @@ const driverSchema = new Schema({
 })
 const Driver = mongoose.model("driver_collection", driverSchema)
 
+/* --- ORDER --- */
+const orderSchema = new Schema({
+    order_number:String, 
+    menu_item:String, 
+    order_date:String,
+    proof_photo:String,
+    order_status:String
+})
+const Order = mongoose.model("order_collection", orderSchema)
+
 /* ########################################## */
-/* ### ENDPOINTS ############################ */
+/* ### TESTING ENDPOINTS #################### */
 /* ########################################## */
 
-/* --- TESTING --- */
+app.get(`/testing-orders`, async (req, res) => {
+    console.log(THIS_IS_ORDERS)
+
+    results = await Order.find().lean().exec()
+
+    console.log(debug(JSON.stringify(results)))
+    console.log(results)
+
+    res.send("")
+ })
+
 app.get(`/testing-drivers`, async (req, res) => {
     console.log(THIS_IS_DRIVERS)
 
@@ -101,6 +130,10 @@ app.get(`/testing-drivers`, async (req, res) => {
 
     res.send("")
  })
+
+/* ########################################## */
+/* ### ENDPOINTS ############################ */
+/* ########################################## */
 
 /* --- CREATE --- */
 app.get("/", (req, res) => {
