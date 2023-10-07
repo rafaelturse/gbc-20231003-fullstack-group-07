@@ -54,7 +54,7 @@ const USERNAME = "rafaelturse"
 const PASSWORD = "qBnX8Z0RH96IP8Sg"
 
 /* --- CONNECTION STRING --- */
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 const CONNECTION_STRING = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.h1rrj2i.mongodb.net/${ACTIVE_DB}?retryWrites=true&w=majority`
 mongoose.connect(CONNECTION_STRING)
 
@@ -95,31 +95,31 @@ const Order = mongoose.model("order_collection", orderSchema)
 /* ########################################## */
 
 const checkEmpty = (value)  => {
-    if (value !== undefined && value !== ""){
-        return true
-    }
-
+    if (value !== undefined && value !== "") { return true }
     return false
 }
 
 const ensureLogin = (req, res, next) => {
-    /*  
-        a middleware function to ensure that the user is 
-        logged in before they can access any page such as 
-        dashboard or profile or viewjobs
-    */
+    // a middleware function to ensure that the user is 
+    // logged in before they can access any page such as 
+    // dashboard or profile or viewjobs
 
     if (req.session.isLoggedIn !== undefined && 
         req.session.isLoggedIn && 
         req.session.user !== undefined){
         //if user has logged in allow them to go to desired endpoint
         next()
-    }else{
+    } else {
         //otherwise, ask them to login first
+        console.log(`>>> DEBUG: driver user not logged in!`)
 
-         return res.render("login", 
-            {errorMsg: "You must login first to access dashboard", 
-            layout: false})
+        return res.render("header-template", {
+            layout: "login",
+            missingCredentialMessage: `
+                <strong>Driver user not logged in!</strong> 
+                Please, make sure you are logged in before accessing the available orders.
+                `
+        })
     }
 }
 
@@ -173,6 +173,14 @@ app.post("/login", async (req, res) => {
 
     const usernameFromUI = req.body.username
     const passwordFromUI = req.body.password
+
+    try {
+        if (req.session.isLoggedIn){
+            res.redirect("/driver-orders")
+        }
+    } catch (error) {
+        console.log("sa")
+    }
 
     //ERROR: if empty username or password
     if (!checkEmpty(usernameFromUI) || !checkEmpty(passwordFromUI)) {
