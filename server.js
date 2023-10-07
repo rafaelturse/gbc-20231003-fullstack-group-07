@@ -186,10 +186,10 @@ app.post("/login", async (req, res) => {
 
     try {
         //DB: driver search 
-        const results = await Driver.find({ username:usernameFromUI, password:passwordFromUI }).lean().exec()
+        const driver = await Driver.findOne({ username:usernameFromUI, password:passwordFromUI }).lean().exec()
         
         //ERROR: if driver not found
-        if (results.length === 0) {
+        if (driver === null) {
             console.log(`>>> DEBUG: driver not found! Please, contact ADMIN.`);
             console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
 
@@ -208,11 +208,14 @@ app.post("/login", async (req, res) => {
 
             //SESSION IN
             req.session.user = {
-                uname: usernameFromUI,
-                password: passwordFromUI,
+                uname: driver.username,
+                password: driver.password,
             }
             req.session.isLoggedIn = true
-            req.session.username = usernameFromUI
+            req.session.fullname = driver.fullname
+            req.session.license_plate = driver.license_plate
+            req.session.phone = driver.phone
+            req.session.username = driver.username
 
             res.redirect("/driver-orders")
         }
@@ -243,7 +246,13 @@ app.get("/logout", async (req, res) => {
 app.get("/driver-orders", ensureLogin, async (req, res) => {
     console.log(`>>> DEBUG: this is driver orders page`);
 
-    return res.render("header-template", { layout:"driver-orders" })
+    return res.render("header-template", {
+        layout: "driver-orders",
+        fullname: req.session.fullname,
+        license_plate: req.session.license_plate,
+        phone: req.session.phone,
+        username: req.session.username,
+    })
 })
 
 /* ########################################## */

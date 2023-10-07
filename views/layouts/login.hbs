@@ -13,7 +13,7 @@
     <!-- LOGIN -->
     <main>
         <div class="container">
-          <form action="/login" method="post">
+          <form class="bg-dark" action="/login" method="post">
             <div class="highlight-container title-l text-center">Driver Log in</div>
             <label class="field-label" for="username">Username</label>
             <input type="text" name="username" placeholder="Enter the driver username">
@@ -27,7 +27,7 @@
               </div>
             {{/if}}
                 
-            <button class="bg-blue" type="submit">LOG IN</button>
+            <button id="btn-log-in" class="bg-blue" type="submit">LOG IN</button>
           </form>
         </div>
     </main>
