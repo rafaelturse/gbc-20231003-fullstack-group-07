@@ -99,18 +99,14 @@ const checkEmpty = (value)  => {
     return false
 }
 
+/* --- A MIDDLEWARE TO ENSURE ACCESS ONLY BY LOGGED USERS --- */
 const ensureLogin = (req, res, next) => {
-    // a middleware function to ensure that the user is 
-    // logged in before they can access any page such as 
-    // dashboard or profile or viewjobs
-
+    //if user has logged in, allow access
     if (req.session.isLoggedIn !== undefined && 
         req.session.isLoggedIn && 
         req.session.user !== undefined){
-        //if user has logged in allow them to go to desired endpoint
         next()
     } else {
-        //otherwise, ask them to login first
         console.log(`>>> DEBUG: driver user not logged in!`)
 
         return res.render("header-template", {
@@ -124,7 +120,7 @@ const ensureLogin = (req, res, next) => {
 }
 
 /* ########################################## */
-/* ### TESTING ENDPOINTS #################### */
+/* ### TESTING DB ENDPOINTS ################# */
 /* ########################################## */
 
 app.get(`/testing-get-orders`, async (req, res) => {
@@ -155,14 +151,14 @@ app.get(`/testing-get-drivers`, async (req, res) => {
 
 /* --- ROOT --- */
 app.get("/", (req, res) => {
-    console.log(">>> DEBUG: this is root, redirecting to driver login")
+    console.log(">>> DEBUG: this is the root, redirecting to driver login page")
 
     res.redirect("/login")
 })
 
 /* --- GET LOGIN PAGE --- */
 app.get("/login", (req, res) => {
-    console.log(">>> DEBUG: this is driver login")
+    console.log(">>> DEBUG: this is driver login page")
 
     res.render("header-template", { layout:"login" })
 })
@@ -173,14 +169,6 @@ app.post("/login", async (req, res) => {
 
     const usernameFromUI = req.body.username
     const passwordFromUI = req.body.password
-
-    try {
-        if (req.session.isLoggedIn){
-            res.redirect("/driver-orders")
-        }
-    } catch (error) {
-        console.log("sa")
-    }
 
     //ERROR: if empty username or password
     if (!checkEmpty(usernameFromUI) || !checkEmpty(passwordFromUI)) {
@@ -253,7 +241,7 @@ app.get("/logout", async (req, res) => {
 
 /* --- GET DRIVER-ORDERS --- */
 app.get("/driver-orders", ensureLogin, async (req, res) => {
-    console.log(`>>> DEBUG: this is driver orders`);
+    console.log(`>>> DEBUG: this is driver orders page`);
 
     return res.render("header-template", { layout:"driver-orders" })
 })
