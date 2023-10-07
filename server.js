@@ -169,7 +169,7 @@ app.get("/login", (req, res) => {
 
 /* --- LOGIN VALIDATION --- */
 app.post("/login", async (req, res) => {
-    console.log(">>> DEBUG: driver login checking")
+    console.log(">>> DEBUG: checking driver credentials")
 
     const usernameFromUI = req.body.username
     const passwordFromUI = req.body.password
@@ -223,7 +223,6 @@ app.post("/login", async (req, res) => {
                 uname: usernameFromUI,
                 password: passwordFromUI,
             }
-
             req.session.isLoggedIn = true
             req.session.username = usernameFromUI
 
@@ -245,7 +244,7 @@ app.post("/login", async (req, res) => {
 
 /* --- LOGOUT --- */
 app.get("/logout", async (req, res) => {
-    console.log(">>> DEBUG: this is logout")
+    console.log(">>> DEBUG: successfully logged out!")
 
     req.session.destroy()
     
