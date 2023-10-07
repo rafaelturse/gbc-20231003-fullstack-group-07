@@ -24,7 +24,7 @@ const myStorage = multer.diskStorage({
 const upload = multer({storage: myStorage})
 
 /* --- SESSION --- */
-const session = require('express-session');
+const session = require('express-session')
 app.use(session({
     secret: 'gbc-restaurant', //any random string used for configuring the session
     resave: false,
@@ -72,7 +72,7 @@ const Schema = mongoose.Schema
 
 /* --- DRIVER --- */
 const driverSchema = new Schema({
-    fullName:String, 
+    fullname:String, 
     license_plate:String, 
     phone:Number,
     username:String,
@@ -177,8 +177,8 @@ app.post("/login", async (req, res) => {
 
         return res.render("header-template", {
             layout: "login",
-            missingCredentialMessage: `
-                <strong>Missing Credentials!</strong> 
+            message: `
+                ERROR: <strong>Missing Credentials!</strong> 
                 Please, reenter driver <strong>username</strong> or <strong>password</strong>.
                 `
         })
@@ -190,21 +190,21 @@ app.post("/login", async (req, res) => {
         
         //ERROR: if driver not found
         if (driver === null) {
-            console.log(`>>> DEBUG: driver not found! Please, contact ADMIN.`);
-            console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
+            console.log(`>>> DEBUG: driver not found! Please, contact ADMIN.`)
+            console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`)
 
             return res.render("header-template", {
                 layout: "login",
-                missingCredentialMessage: `
-                    <strong>Driver not Found!</strong> 
+                message: `
+                    ERROR: <strong>Driver not Found!</strong> 
                     Please, reenter driver <strong>username</strong> and <strong>password</strong> 
                     or <strong>contact ADMIN</strong>.
                     ` 
             })
         } else {
             //SUCCESS: driver found, redirecting to driver-orders page
-            console.log(`>>> DEBUG: user found!`);
-            console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
+            console.log(`>>> DEBUG: user found!`)
+            console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`)
 
             //SESSION IN
             req.session.user = {
@@ -220,13 +220,12 @@ app.post("/login", async (req, res) => {
             res.redirect("/driver-orders")
         }
     } catch (error) {
-        console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`);
-        console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`);
+        console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`)
 
         return res.render("header-template", {
             layout: "login",
-            missingCredentialMessage: `
-                Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
+            message: `
+                ERROR: Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
                 at this time, please, try again!
                 ` 
         })
@@ -235,7 +234,7 @@ app.post("/login", async (req, res) => {
 
 /* --- LOGOUT --- */
 app.get("/logout", async (req, res) => {
-    console.log(">>> DEBUG: successfully logged out!")
+    console.log(">>> DEBUG: successfully logged out.")
 
     req.session.destroy()
     
@@ -244,15 +243,36 @@ app.get("/logout", async (req, res) => {
 
 /* --- GET DRIVER-ORDERS --- */
 app.get("/driver-orders", ensureLogin, async (req, res) => {
-    console.log(`>>> DEBUG: this is driver orders page`);
+    console.log(`>>> DEBUG: this is driver orders page`)
 
-    return res.render("header-template", {
-        layout: "driver-orders",
-        fullname: req.session.fullname,
-        license_plate: req.session.license_plate,
-        phone: req.session.phone,
-        username: req.session.username,
-    })
+    try {
+        //DB: available orders search 
+        const orders = await Order.find({ order_status:"READY FOR DELIVERY", driver_assigned:"" }).lean().exec()
+
+        //ALERT: if driver not found
+        if (orders.length === 0) {
+            console.log(`>>> DEBUG: no available orders.`)
+
+            return res.render("header-template", {
+                layout: "driver-orders",
+                fullname: req.session.fullname,
+                license_plate: req.session.license_plate,
+                phone: req.session.phone,
+                username: req.session.username,
+                message: `ALERT: <strong>No Available Orders</strong>`
+            })
+        } 
+    } catch (error) {
+        console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`)
+
+        return res.render("header-template", {
+            layout: "driver-orders",
+            message: `
+                ERROR: Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
+                at this time, please, try again!
+                ` 
+        })
+    }
 })
 
 /* ########################################## */

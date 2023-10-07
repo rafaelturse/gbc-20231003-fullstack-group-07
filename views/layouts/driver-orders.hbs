@@ -10,18 +10,30 @@
     <!-- HEADER -->
     {{{body}}}
 
-    <!-- LOGIN -->
-    <main>
-        <div class="container" style="border: 1px solid #fff;">
-          <div class="line-info-container bg-dark title-simple">
-            <div>Full Name: <strong>{{fullname}}</strong></div>
-            <div>License Plate: <strong>{{license_plate}}</strong></div>
-            <div>Phone: <strong>{{phone}}</strong></div>
-            <div>Username: <strong>{{username}}</strong></div>
+    <!-- DRIVER INFORMATION -->
+    <div class="container">
+      <div class="line-info-container-title bg-dark title-l text-center">Driver Information</div>
+      <div class="line-info-container bg-dark title-simple">
+        <div>Full Name: <strong>{{fullname}}</strong></div>
+        <div>License Plate: <strong>{{license_plate}}</strong></div>
+        <div>Phone: <strong>{{phone}}</strong></div>
+        <div>Username: <strong>{{username}}</strong></div>
 
-            <button id="btn-log-out" class="bg-blue" type="submit">LOG OUT</button>
+        <form id="form-driver-info" action="/logout" method="get" >
+          <button id="btn-log-out" class="bg-blue" type="submit">LOG OUT</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="container">
+      {{#if message}}
+        <div class="alert-message describe text-center">{{{message}}}</div>
+      {{else}}
+          <div class="bg-dark title-simple">
+
           </div>
-        </div>
-    </main>
+      {{/if}}
+    </div>
   </body>
 </html>
