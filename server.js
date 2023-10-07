@@ -58,10 +58,11 @@ const PASSWORD = "qBnX8Z0RH96IP8Sg"
 const DATABASE_CONNECTED = `>>> DEBUG: MongoDB - Connected successfully to database: ${ACTIVE_DB}`
 const DATABASE_ERROR_TO_CONNECTED = `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`
 /* --- DEBUG --- */
-const THIS_IS_DRIVERS = ">>> DEBUG: this is drivers"
-const THIS_IS_LOGIN = ">>> DEBUG: this is login"
-const THIS_IS_ORDERS = ">>> DEBUG: this is orders"
-const THIS_IS_ROOT = ">>> DEBUG: this is root"
+const CHECKING_LOGIN = ">>> DEBUG: driver login checking"
+const THIS_IS_DRIVERS = ">>> DEBUG: this is drivers' collection"
+const THIS_IS_LOGIN = ">>> DEBUG: this is driver login"
+const THIS_IS_ORDERS = ">>> DEBUG: this is orders' collection"
+const THIS_IS_ROOT = ">>> DEBUG: this is root, redirecting to driver login"
 
 /* ########################################## */
 /* ### DB ################################### */
@@ -81,6 +82,7 @@ db.once("open", () => { console.log(DATABASE_CONNECTED) })
 /* ### SCHEMA ############################### */
 /* ########################################## */
 
+/* --- SCHEMA INSTANCE --- */
 const Schema = mongoose.Schema
 
 /* --- DRIVER --- */
@@ -137,14 +139,21 @@ app.get(`/testing-get-drivers`, async (req, res) => {
 app.get("/", (req, res) => {
     console.log(THIS_IS_ROOT)
 
-    res.redirect("/login");
-});
+    res.redirect("/login")
+})
 
-/* --- CREATE --- */
+/* --- GET LOGIN --- */
 app.get("/login", (req, res) => {
     console.log(THIS_IS_LOGIN)
 
     res.render("header-template", { layout:"index" })
+})
+
+/* --- CHECK LOGIN --- */
+app.post("/login", (req, res) => {
+    console.log(CHECKING_LOGIN)
+
+   
 })
 
 /* --- READ --- */

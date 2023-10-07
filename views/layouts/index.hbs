@@ -8,13 +8,22 @@
   </head>
   <body>
     <!-- HEADER -->
-    <div class="container">
-      {{{body}}}
+    {{{body}}}
 
-      <!-- LOGIN -->
-      <section>
-          
-      </section>
-    </div>
+    <!-- LOGIN -->
+    <main>
+        <div class="container">
+          <form action="/login" method="post">
+            <div class="highlight-container title-l text-center">Driver Log in</div>
+            <label class="field-label" for="username">Username</label>
+            <input type="text" name="username" placeholder="Enter the driver username">
+
+            <label class="field-label" for="password">Password</label>
+            <input type="password" name="password" placeholder="Enter the driver Password">
+                
+            <button class="bg-blue" type="submit">LOG IN</button>
+          </form>
+        </div>
+    </main>
   </body>
 </html>
