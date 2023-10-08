@@ -11,26 +11,28 @@
     {{{body}}}
 
     <!-- DRIVER INFORMATION -->
-    <div class="container">
+    <div class="container ">
       <div class="line-info-container-title bg-dark title-l text-center">Driver Information</div>
-      <div class="line-info-container bg-dark title-simple">
-        <div>Full Name: <strong>{{fullname}}</strong></div>
-        <div>License Plate: <strong>{{license_plate}}</strong></div>
-        <div>Phone: <strong>{{phone}}</strong></div>
-        <div>Username: <strong>{{username}}</strong></div>
+      <div class="info-container bg-dark title-simple">
+        <div class="info-container-item">Full Name: <strong>{{fullname}}</strong></div>
+        <div class="info-container-item">License Plate: <strong>{{license_plate}}</strong></div>
+        <div class="info-container-item">Phone: <strong>{{phone}}</strong></div>
+        <div class="info-container-item">Username: <strong>{{username}}</strong></div>
+        <div class="info-container-item">Vehicle Model: <strong>{{vehicle_model}}</strong></div>
+        <div class="info-container-item">Vehicle Color: <strong>{{vehicle_color}}</strong></div>
 
-        <form id="form-driver-info" action="/logout" method="get" >
+        <form class="info-container-footer" action="/logout" method="get" >
           <button class="btn-task bg-blue" type="submit">LOG OUT</button>
         </form>
       </div>
     </div>
-
+    
     <hr />
 
     <!-- ORDERS -->
     <div class="container">
-      {{#if message}}
-        <div class="alert-message describe text-center">{{{message}}}</div>
+      {{#if availableOrdersMessage}}
+        <div class="alert-message describe text-center">{{{availableOrdersMessage}}}</div>
       {{else}}
           <div class="line-info-container-title bg-dark title-l text-center">Available Orders</div>
           <div class="line-info-container bg-dark title-simple">

@@ -74,8 +74,10 @@ const Schema = mongoose.Schema
 /* --- DRIVER --- */
 const driverSchema = new Schema({
     fullname:String, 
-    license_plate:String, 
     phone:Number,
+    license_plate:String, 
+    vehicle_model:String, 
+    vehicle_color:String, 
     username:String,
     password:String
 })
@@ -214,8 +216,10 @@ app.post("/login", async (req, res) => {
             }
             req.session.isLoggedIn = true
             req.session.fullname = driver.fullname
-            req.session.license_plate = driver.license_plate
             req.session.phone = driver.phone
+            req.session.license_plate = driver.license_plate
+            req.session.vehicle_model = driver.vehicle_model
+            req.session.vehicle_color = driver.vehicle_color
             req.session.username = driver.username
 
             res.redirect("/driver-orders")
@@ -262,10 +266,12 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
             return res.render("header-template", {
                 layout: "driver-orders",
                 fullname: req.session.fullname,
-                license_plate: req.session.license_plate,
                 phone: req.session.phone,
+                license_plate: req.session.license_plate,
+                vehicle_model: req.session.vehicle_model,
+                vehicle_color: req.session.vehicle_color,
                 username: req.session.username,
-                message: `<strong>ALERT:</strong> No available orders.`
+                availableOrdersMessage: `<strong>ALERT:</strong> No available orders.`
             })
         } else {
             console.log(`>>> DEBUG: this is available orders.`)
@@ -273,8 +279,10 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
             return res.render("header-template", {
                 layout: "driver-orders",
                 fullname: req.session.fullname,
-                license_plate: req.session.license_plate,
                 phone: req.session.phone,
+                license_plate: req.session.license_plate,
+                vehicle_model: req.session.vehicle_model,
+                vehicle_color: req.session.vehicle_color,
                 username: req.session.username,
                 orders: orders
             })

@@ -11,8 +11,10 @@ DB - collections
         - credit_card_Number: string
     - driver_collections
         - fullName: string
-        - license_plate: string
         - phone: int
+        - license_plate: string
+        - vehicle_model: string
+        - vehicle_color: string
         - username: string 
         - password: string (not encrypted)
     - restaurant_menu_collections
@@ -36,8 +38,24 @@ DB - collections
 ------------------------------------------------------------------------------------------
 - driver_collections
     [
-        {"fullname":"Rafael Turse", "license_plate":"rafa777", "phone":5471505471, "username":"rafaelturse", "password":"123"},
-        {"fullname":"Kratos", "license_plate":"krts123", "phone":1254785241, "username":"kratos", "password":"123"}
+        {
+            "fullname":"Rafael Turse", 
+            "phone":5471505471, 
+            "license_plate":"rafa777", 
+            "vehicle_model":"Honda Civic", 
+            "vehicle_color":"black", 
+            "username":"rafaelturse", 
+            "password":"123"
+        },
+        {
+            "fullname":"Kratos", 
+            "phone":1458541555, 
+            "license_plate":"krts558", 
+            "vehicle_model":"Audi Q5", 
+            "vehicle_color":"Blue", 
+            "username":"kratos123", 
+            "password":"123"
+        },
     ]
 ------------------------------------------------------------------------------------------
 - order_collections
