@@ -22,12 +22,19 @@
           <input type="password" name="password" placeholder="Enter the driver Password">
 
           {{#if message}}
-            <div class="error-message describe text-center">
-              {{{message}}}
-            </div>
+            <div class="error-message describe text-center">{{{message}}}</div>
           {{/if}}
-              
+          
+          {{#if createdMessage}}
+            <div class="success-message describe text-center">{{{createdMessage}}}</div>
+          {{/if}}
+          
           <button id="btn-log-in" class="bg-blue" type="submit">LOG IN</button>
+        </form>
+
+        <form id="form-sign-up" class="bg-dark" action="/sign-up" method="get">
+          <div class="highlight-container title-m text-center">Become a driver today!</div>
+          <button id="btn-log-in" class="bg-blue" type="submit">SIGN UP</button>
         </form>
       </div>
     </main>

@@ -149,6 +149,100 @@ app.get(`/testing-get-drivers`, async (req, res) => {
 })
 
 /* ########################################## */
+/* ### SIGN-UP ENDPOINTS #################### */
+/* ########################################## */
+
+/* --- GET SIGN-UP --- */
+app.get("/sign-up", async (req, res) => { 
+    console.log(">>> DEBUG: this is sign-up page")
+
+    res.render("header-template", { layout:"sign-up" })
+})
+
+/* --- POST SIGN-UP --- */
+app.post("/sign-up", async (req, res) => {
+    console.log(">>> DEBUG: checking driver signing-up data")
+
+    const fullnameFromUI = req.body.fullname
+    const phoneFromUI = req.body.phone
+    const license_plateFromUI = req.body.license_plate
+    const vehicle_modelFromUI = req.body.vehicle_model
+    const vehicle_colorFromUI = req.body.vehicle_color
+    const usernameFromUI = req.body.username
+    const passwordFromUI = req.body.password
+
+    //ERROR: if params empty
+    if (!checkEmpty(fullnameFromUI) || 
+        !checkEmpty(phoneFromUI) || 
+        !checkEmpty(license_plateFromUI) || 
+        !checkEmpty(vehicle_modelFromUI) || 
+        !checkEmpty(vehicle_colorFromUI) || 
+        !checkEmpty(usernameFromUI) || 
+        !checkEmpty(passwordFromUI)) 
+    {
+        console.log(`>>> DEBUG: driver missing data!`)
+
+        return res.render("header-template", {
+            layout: "sign-up",
+            message: `<strong>ERROR: Missing Data!</strong> Please, reenter driver information.`
+        })
+    }
+    
+     //ERROR: if driver already exists
+     try {
+        //DB: driver search 
+        const drivers = await Driver.find(
+            { $or: [
+                { phone: phoneFromUI },
+                { license_plate: license_plateFromUI },
+                { username: usernameFromUI }
+            ] }
+        ).lean().exec()
+
+        if (drivers.length > 0) {
+            console.log(`>>> DEBUG: driver already exists!`)
+    
+            return res.render("header-template", {
+                layout: "sign-up",
+                message: `<strong>ERROR: Driver already exists!</strong> Please, check driver information.`
+            })
+        } 
+
+        //setting driver up
+        const driver = new Driver({ 
+            fullname:fullnameFromUI,
+            phone:phoneFromUI, 
+            license_plate:license_plateFromUI,
+            vehicle_model:vehicle_modelFromUI,
+            vehicle_color:vehicle_colorFromUI,
+            username:usernameFromUI,
+            password:passwordFromUI,
+        })
+
+        //DB: saving driver
+        await driver.save()
+
+        if (driver !== null) {
+            console.log(`>>> DEBUG: Driver successfully created!`)
+  
+            return res.render("header-template", {
+                layout: "login",
+                createdMessage: `Driver successfully created!`
+            })
+        }
+
+     } catch (error) {
+        console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
+        console.log(`>>> DEBUG: ERROR > ${error}`)
+
+        return res.render("header-template", {
+            layout: "sign-up",
+            message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
+        })
+     }
+})
+
+/* ########################################## */
 /* ### LOGIN ENDPOINTS ###################### */
 /* ########################################## */
 
@@ -159,21 +253,21 @@ app.get("/", (req, res) => {
     res.redirect("/login")
 })
 
-/* --- GET LOGIN PAGE --- */
+/* --- GET LOGIN --- */
 app.get("/login", (req, res) => {
     console.log(">>> DEBUG: this is driver login page")
 
     res.render("header-template", { layout:"login" })
 })
 
-/* --- LOGIN VALIDATION --- */
+/* --- POST LOGIN --- */
 app.post("/login", async (req, res) => {
     console.log(">>> DEBUG: checking driver credentials")
 
     const usernameFromUI = req.body.username
     const passwordFromUI = req.body.password
 
-    //ERROR: if empty username or password
+    //ERROR: if params empty
     if (!checkEmpty(usernameFromUI) || !checkEmpty(passwordFromUI)) {
         console.log(`>>> DEBUG: driver missing credentials:`)
         console.log(`>>> DEBUG: catch: (user: ${usernameFromUI} | password: ${passwordFromUI})`)

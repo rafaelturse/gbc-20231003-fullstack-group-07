@@ -31,47 +31,45 @@
 
     <!-- ORDERS -->
     <div class="container">
-      {{#if availableOrdersMessage}}
-        <div class="alert-message describe text-center">{{{availableOrdersMessage}}}</div>
-      {{else}}
-          <div class="line-info-container-title bg-dark title-l text-center">Available Orders</div>
-          <div class="line-info-container bg-dark title-simple">
-            <table>
-                <tr class="title-simple">
-                  <th class="text-center">Assign To Me</th>
-                  <th class="text-center">Order Number</th>
-                  <th class="text-center">Food</th>
-                  <th class="text-center">Order Date</th>
-                  <th class="text-center">Order Status</th>
-                  <th class="text-center">Update Order Status</th>
-                  <th class="text-center">Proof Photo</th>
-                </tr>
-              {{#each orders}}
-                <tr class="tr-order-info describe">
-                  <td class="text-center">
-                    <form class="form-task" action="/assign-driver-to-order/{{this.order_number}}" method="post" >
-                      <button class="btn-task table-button bg-blue" type="submit">ASSIGN</button>
-                    </form>
-                  </td>
-                  <td class="table-text text-center">{{this.order_number}}</td>
-                  <td class="table-text">{{this.menu_item}}</td>
-                  <td class="table-text text-center">{{this.order_date}}</td>
-                  <td class="table-text text-center">{{this.order_status}}</td>
-                  <td class="table-text text-center">
-                    <form class="form-task" action="/" method="get" >
-                      <button class="btn-task table-button bg-blue" type="submit">UPDATE</button>
-                    </form>
-                  </td>
-                  <td class="text-center">
-                    <form class="form-task" action="/" method="get" >
-                      <button class="btn-task table-button bg-blue" type="submit">UPDATE</button>
-                    </form>
-                  </td>
-                </tr>
-              {{/each}}
-            </table>
-          </div>
-      {{/if}}
+      <div class="line-info-container-title bg-dark title-l text-center">Available Orders</div>
+      <div class="line-info-container bg-dark title-simple">
+        <table>
+            <tr class="title-simple">
+              <th class="text-center">Order Number</th>
+              <th class="text-center">Food</th>
+              <th class="text-center">Order Date</th>
+              <th class="text-center">Order Status</th>
+              <th class="text-center">Assign To Me</th>
+            </tr>
+          {{#if availableOrdersMessage}}
+            <div class="alert-message describe text-center">{{{availableOrdersMessage}}}</div>
+          {{else}}
+            {{#each orders}}
+              <tr class="tr-order-info describe">
+                <td class="table-text text-center">{{this.order_number}}</td>
+                <td class="table-text">{{this.menu_item}}</td>
+                <td class="table-text text-center">{{this.order_date}}</td>
+                <td class="table-text text-center">{{this.order_status}}</td>
+                <td class="text-center">
+                  <form class="form-task" action="/assign-driver-to-order/{{this.order_number}}" method="post" >
+                    <button class="btn-task table-button bg-blue" type="submit">ASSIGN</button>
+                  </form>
+                </td>
+                {{!-- <td class="table-text text-center">
+                  <form class="form-task" action="/" method="get" >
+                    <button class="btn-task table-button bg-blue" type="submit">UPDATE</button>
+                  </form>
+                </td>
+                <td class="text-center">
+                  <form class="form-task" action="/" method="get" >
+                    <button class="btn-task table-button bg-blue" type="submit">UPDATE</button>
+                  </form>
+                </td> --}}
+              </tr>
+            {{/each}}
+          {{/if}}
+        </table>
+      </div>
     </div>
   </body>
 </html>
