@@ -55,6 +55,7 @@ const PASSWORD = "qBnX8Z0RH96IP8Sg"
 
 /* --- CONNECTION STRING --- */
 const mongoose = require("mongoose")
+const { log } = require('console')
 const CONNECTION_STRING = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.h1rrj2i.mongodb.net/${ACTIVE_DB}?retryWrites=true&w=majority`
 mongoose.connect(CONNECTION_STRING)
 
@@ -85,8 +86,9 @@ const orderSchema = new Schema({
     order_number:String, 
     menu_item:String, 
     order_date:String,
-    proof_photo:String,
-    order_status:String
+    order_status:String,
+    order_driver:String,
+    proof_photo:String
 })
 const Order = mongoose.model("order_collection", orderSchema)
 
@@ -111,10 +113,9 @@ const ensureLogin = (req, res, next) => {
 
         return res.render("header-template", {
             layout: "login",
-            missingCredentialMessage: `
-                <strong>Driver user not logged in!</strong> 
-                Please, make sure you are logged in before accessing the available orders.
-                `
+            missingCredentialMessage: 
+                `<strong>Driver user not logged in!</strong> 
+                Please, make sure you are logged in before accessing the available orders.`
         })
     }
 }
@@ -146,7 +147,7 @@ app.get(`/testing-get-drivers`, async (req, res) => {
 })
 
 /* ########################################## */
-/* ### HOT ENDPOINTS ######################## */
+/* ### LOGIN ENDPOINTS ###################### */
 /* ########################################## */
 
 /* --- ROOT --- */
@@ -177,10 +178,9 @@ app.post("/login", async (req, res) => {
 
         return res.render("header-template", {
             layout: "login",
-            message: `
-                <strong>ERROR: Missing Credentials!</strong> 
-                Please, reenter driver <strong>username</strong> or <strong>password</strong>.
-                `
+            message: 
+                `<strong>ERROR: Missing Credentials!</strong> 
+                Please, reenter driver <strong>username</strong> or <strong>password</strong>.`
         })
     } 
 
@@ -197,11 +197,10 @@ app.post("/login", async (req, res) => {
 
             return res.render("header-template", {
                 layout: "login",
-                message: `
-                    <strong>ERROR: Driver not Found!</strong> 
+                message: 
+                    `<strong>ERROR: Driver not Found!</strong> 
                     Please, reenter driver <strong>username</strong> and <strong>password</strong> 
-                    or <strong>contact ADMIN</strong>.
-                    ` 
+                    or <strong>contact ADMIN</strong>.` 
             })
         } else {
             //SUCCESS: driver found, redirecting to driver-orders page
@@ -222,14 +221,12 @@ app.post("/login", async (req, res) => {
             res.redirect("/driver-orders")
         }
     } catch (error) {
-        console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`)
+        console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
+        console.log(`>>> DEBUG: ERROR > ${error}`)
 
         return res.render("header-template", {
             layout: "login",
-            message: `
-                <strong>ERROR:</strong> Unable to connect to 
-                database: <strong>${ACTIVE_DB}</strong> at this time, please, try again!
-                ` 
+            message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
         })
     }
 })
@@ -237,11 +234,13 @@ app.post("/login", async (req, res) => {
 /* --- LOGOUT --- */
 app.get("/logout", async (req, res) => {
     console.log(">>> DEBUG: successfully logged out.")
-
     req.session.destroy()
-    
     res.redirect("/login")
 })
+
+/* ########################################## */
+/* ### DRIVER ORDERS ENDPOINTS ############## */
+/* ########################################## */
 
 /* --- GET DRIVER-ORDERS --- */
 app.get("/driver-orders", ensureLogin, async (req, res) => {
@@ -250,10 +249,13 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
     try {
         //DB: available orders search 
         const orders = await Order.find(
-            { order_status:"READY FOR DELIVERY" }
+            { 
+                order_status:"READY FOR DELIVERY",
+                order_driver:""
+            }
         ).lean().exec()
 
-        //ALERT: if driver not found
+        //ALERT: if orders not available
         if (orders.length === 0) {
             console.log(`>>> DEBUG: no available orders.`)
 
@@ -263,10 +265,10 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
                 license_plate: req.session.license_plate,
                 phone: req.session.phone,
                 username: req.session.username,
-                message: `<strong>ALERT:</strong> No Available Orders`
+                message: `<strong>ALERT:</strong> No available orders.`
             })
         } else {
-            console.log(`>>> DEBUG: this is driver orders.`)
+            console.log(`>>> DEBUG: this is available orders.`)
 
             return res.render("header-template", {
                 layout: "driver-orders",
@@ -278,14 +280,60 @@ app.get("/driver-orders", ensureLogin, async (req, res) => {
             })
         }
     } catch (error) {
-        console.log(`>>> DEBUG: Unable to connect to database: ${ACTIVE_DB} at this time, please, try again!`)
+        console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
+        console.log(`>>> DEBUG: ERROR > ${error}`)
 
         return res.render("header-template", {
             layout: "driver-orders",
-            message: `
-                <strong>ERROR:</strong> Unable to connect to database: <strong>${ACTIVE_DB}</strong> 
-                at this time, please, try again!
-                ` 
+            message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
+        })
+    }
+})
+
+/* --- ASSIGN DRIVER TO ORDER --- */
+app.post("/assign-driver-to-order/:order_number", async (req, res) => {
+    console.log(">>> DEBUG: assigning driver to the order.")
+
+    const order_number = req.params.order_number
+
+    try {
+        //DB: order search 
+        const order = await Order.findOne({ order_number:order_number })
+
+        //ERROR: if orders not available
+        if (order === null) {
+            console.log(`>>> DEBUG: order: ${order_number}, not found.`)
+
+            res.redirect("/driver-orders")
+        } else {
+            console.log(`>>> DEBUG: order: ${order_number}, found.`)
+
+            //set update values
+            const updatedValues = { 
+                order_status:"IN TRANSIT",
+                order_driver:req.session.username 
+            }
+
+            //assigning driver to order
+            const result = await order.updateOne(updatedValues)
+
+            if (result !== null) {
+                console.log(`>>> DEBUG: order: ${order_number}, assigned to driver: ${req.session.username}`)
+    
+                res.redirect("/driver-orders")
+            } else {
+                console.log(`>>> DEBUG: order: ${order_number} update has failed, please, try again!`)
+
+                res.redirect("/driver-orders")
+            }
+        }
+    } catch (error) {
+        console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
+        console.log(`>>> DEBUG: ERROR > ${error}`)
+
+        return res.render("header-template", {
+            layout: "driver-orders",
+            message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
         })
     }
 })

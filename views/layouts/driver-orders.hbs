@@ -47,7 +47,7 @@
               {{#each orders}}
                 <tr class="tr-order-info describe">
                   <td class="text-center">
-                    <form class="form-task" action="/" method="get" >
+                    <form class="form-task" action="/assign-driver-to-order/{{this.order_number}}" method="post" >
                       <button class="btn-task table-button bg-blue" type="submit">ASSIGN</button>
                     </form>
                   </td>
