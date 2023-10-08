@@ -140,17 +140,7 @@ button:hover {
     width: 100%;
 }
 
-#form-login {
-    border-radius: 20px;
-    border: none;
-
-    padding: 50px;
-    margin: 20px;
-
-    width:40%;
-}
-
-#form-sign-up {
+.form-login {
     border-radius: 20px;
     border: none;
 
