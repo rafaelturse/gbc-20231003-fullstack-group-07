@@ -17,7 +17,7 @@ const multer = require("multer")
 const myStorage = multer.diskStorage({
     destination: "assets/img/driver",
     filename: function(req, file, cb){
-        cb(null , `${Date.now()}-driver-${path.extname(file.originalname)}`)
+        cb(null , `${Date.now()}-driver${path.extname(file.originalname)}`)
     }
 })
 
@@ -461,7 +461,7 @@ app.get("/delivery-fulfillment", ensureLogin, async (req, res) => {
             console.log(`>>> DEBUG: no available orders.`)
 
             return res.render("header-template", {
-                layout: "driver-orders",
+                layout: "delivery-fulfillment",
                 fullname: req.session.fullname,
                 phone: req.session.phone,
                 license_plate: req.session.license_plate,
