@@ -53,7 +53,7 @@ DB - collections
             "license_plate":"krts558", 
             "vehicle_model":"Audi Q5", 
             "vehicle_color":"Blue", 
-            "username":"kratos123", 
+            "username":"kratos", 
             "password":"123"
         },
     ]

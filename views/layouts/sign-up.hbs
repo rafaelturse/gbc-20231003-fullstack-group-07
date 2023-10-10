@@ -10,7 +10,7 @@
     <!-- HEADER -->
     {{{body}}}
 
-    <!-- LOGIN -->
+    <!-- SIGN UP -->
     <main>
       <div class="container">
         <form class="form-login bg-dark" action="/sign-up" method="post">
@@ -37,9 +37,7 @@
           <input class="input" type="password" name="password" placeholder="Enter the driver Password">
 
           {{#if message}}
-            <div class="error-message describe text-center">
-              {{{message}}}
-            </div>
+            <div class="error-message describe text-center">{{{message}}}</div>
           {{/if}}
 
           <button id="btn-log-in" class="bg-blue" type="submit">SIGN UP</button>
