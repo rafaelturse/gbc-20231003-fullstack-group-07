@@ -155,11 +155,10 @@ app.get(`/testing-get-drivers`, async (req, res) => {
 /* --- GET SIGN-UP --- */
 app.get("/sign-up", async (req, res) => { 
     console.log(">>> DEBUG: this is sign-up page")
-
     res.render("header-template", { layout:"sign-up" })
 })
 
-/* --- POST SIGN-UP --- */
+/* --- SIGN-UP --- */
 app.post("/sign-up", async (req, res) => {
     console.log(">>> DEBUG: checking driver signing-up data")
 
@@ -245,10 +244,9 @@ app.post("/sign-up", async (req, res) => {
 /* ### LOGIN ENDPOINTS ###################### */
 /* ########################################## */
 
-/* --- ROOT --- */
+/* --- GET ROOT --- */
 app.get("/", (req, res) => {
     console.log(">>> DEBUG: this is the root, redirecting to driver login page")
-
     res.redirect("/login")
 })
 
@@ -259,7 +257,7 @@ app.get("/login", (req, res) => {
     res.render("header-template", { layout:"login" })
 })
 
-/* --- POST LOGIN --- */
+/* --- LOGIN --- */
 app.post("/login", async (req, res) => {
     console.log(">>> DEBUG: checking driver credentials")
 
@@ -328,7 +326,7 @@ app.post("/login", async (req, res) => {
     }
 })
 
-/* --- LOGOUT --- */
+/* --- GET LOGOUT --- */
 app.get("/logout", async (req, res) => {
     console.log(">>> DEBUG: successfully logged out.")
     req.session.destroy()
@@ -404,7 +402,6 @@ app.post("/assign-driver-to-order/:order_number", async (req, res) => {
         //ERROR: if orders not available
         if (order === null) {
             console.log(`>>> DEBUG: order: ${order_number}, not found.`)
-
             res.redirect("/driver-orders")
         } else {
             console.log(`>>> DEBUG: order: ${order_number}, found.`)
