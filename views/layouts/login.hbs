@@ -16,10 +16,10 @@
         <form class="form-login bg-dark" action="/login" method="post">
           <div class="highlight-container title-l text-center">Driver Log in</div>
           <label class="field-label" for="username">Username</label>
-          <input type="text" name="username" placeholder="Enter the driver username">
+          <input class="input" type="text" name="username" placeholder="Enter the driver username">
 
           <label class="field-label" for="password">Password</label>
-          <input type="password" name="password" placeholder="Enter the driver Password">
+          <input class="input" type="password" name="password" placeholder="Enter the driver Password">
 
           {{#if message}}
             <div class="error-message describe text-center">{{{message}}}</div>

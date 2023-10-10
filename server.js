@@ -471,7 +471,7 @@ app.get("/delivery-fulfillment", ensureLogin, async (req, res) => {
                 availableOrdersMessage: `<strong>ALERT:</strong> No available orders.`
             })
         } else {
-            console.log(`>>> DEBUG: this is delivery fulfillment`)
+            console.log(`>>> DEBUG: this is delivery fulfillment orders`)
 
             return res.render("header-template", {
                 layout: "delivery-fulfillment",
@@ -492,6 +492,65 @@ app.get("/delivery-fulfillment", ensureLogin, async (req, res) => {
             layout: "delivery-fulfillment",
             message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
         })
+    }
+})
+
+/* --- FULFILLMENT --- */
+app.post(
+    "/delivery-fulfillment/:order_number", 
+    ensureLogin, 
+    upload.single("delivery-proof"), 
+    async (req, res) => { 
+    
+    console.log(">>> DEBUG: this is delivery fulfillment order finalizing")
+
+    const file = req.file
+    const order_number = req.params.order_number
+    
+    //if proof photo uploaded, then finalize order
+    if (file === undefined){
+        console.log(`>>> DEBUG: proof delivery photo not provided!`)
+        res.redirect("/delivery-fulfillment")
+    } else {
+        console.log(`>>> DEBUG: proof delivery photo successfully provided!`)
+
+        try {
+            //DB: order search 
+            const order = await Order.findOne({ order_number:order_number })
+    
+            //ERROR: if orders not available
+            if (order === null) {
+                console.log(`>>> DEBUG: order: ${order_number}, not found.`)
+                res.redirect("/delivery-fulfillment")
+            } else {
+                console.log(`>>> DEBUG: order: ${order_number}, found.`)
+    
+                //set update values
+                const updatedValues = { 
+                    order_status:"DELIVERED",
+                    proof_photo:file.filename 
+                }
+    
+                //finalizing order
+                const result = await order.updateOne(updatedValues)
+    
+                if (result !== null) {
+                    console.log(`>>> DEBUG: order: ${order_number} finalized!`)
+                    res.redirect("/delivery-fulfillment")
+                } else {
+                    console.log(`>>> DEBUG: order: ${order_number} update has failed, please, try again!`)
+                    res.redirect("/delivery-fulfillment")
+                }
+            }
+        } catch (error) {
+            console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
+            console.log(`>>> DEBUG: ERROR > ${error}`)
+    
+            return res.render("header-template", {
+                layout: "driver-orders",
+                message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
+            })
+        }
     }
 })
 

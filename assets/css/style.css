@@ -27,18 +27,6 @@
     width: 30%;
 }
 
-select {
-    border: 3px solid #000;
-    cursor: pointer;
-
-    font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
-    font-weight: bolder;
-    color: #fafafa;
-
-    padding: 10px;
-}
-
 .btn-task {
     border: none;
     cursor: pointer;
@@ -164,7 +152,12 @@ button:hover {
     width:40%;
 }
 
-input {
+.delivery-proof-upload {
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+}
+
+.input {
     border: 1px solid #555;
 
     font-family: 'Montserrat', sans-serif;
@@ -178,6 +171,7 @@ input {
     height: 40px;
     width: 100%;
 }
+
 input:hover {
     border: 1px solid #888;
 }
