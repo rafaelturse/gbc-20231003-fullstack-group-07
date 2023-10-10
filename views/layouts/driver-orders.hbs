@@ -21,9 +21,14 @@
         <div class="info-container-item">Vehicle Model: <strong>{{vehicle_model}}</strong></div>
         <div class="info-container-item">Vehicle Color: <strong>{{vehicle_color}}</strong></div>
 
-        <form class="info-container-footer" action="/logout" method="get" >
-          <button class="btn-task bg-blue" type="submit">LOG OUT</button>
-        </form>
+        <div class="info-container-footer">
+          <form action="/delivery-fulfillment" method="get" >
+            <button class="btn-task bg-blue" type="submit">Drive Orders</button>
+          </form>
+          <form action="/logout" method="get" >
+            <button class="btn-task bg-blue" type="submit">LOG OUT</button>
+          </form>
+        </div>
       </div>
     </div>
     

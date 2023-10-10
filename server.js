@@ -188,8 +188,8 @@ app.post("/sign-up", async (req, res) => {
         })
     }
     
-     //ERROR: if driver already exists
-     try {
+    //ERROR: if driver already exists
+    try {
         //DB: driver search 
         const drivers = await Driver.find(
             { $or: [
@@ -201,7 +201,7 @@ app.post("/sign-up", async (req, res) => {
 
         if (drivers.length > 0) {
             console.log(`>>> DEBUG: driver already exists!`)
-    
+
             return res.render("header-template", {
                 layout: "sign-up",
                 message: `<strong>ERROR: Driver already exists!</strong> Please, check driver information.`
@@ -224,14 +224,13 @@ app.post("/sign-up", async (req, res) => {
 
         if (driver !== null) {
             console.log(`>>> DEBUG: Driver successfully created!`)
-  
+
             return res.render("header-template", {
                 layout: "login",
                 createdMessage: `Driver successfully created!`
             })
         }
-
-     } catch (error) {
+    } catch (error) {
         console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
         console.log(`>>> DEBUG: ERROR > ${error}`)
 
@@ -239,7 +238,7 @@ app.post("/sign-up", async (req, res) => {
             layout: "sign-up",
             message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
         })
-     }
+    }
 })
 
 /* ########################################## */
@@ -422,7 +421,7 @@ app.post("/assign-driver-to-order/:order_number", async (req, res) => {
             if (result !== null) {
                 console.log(`>>> DEBUG: order: ${order_number}, assigned to driver: ${req.session.username}`)
     
-                res.redirect("/driver-orders")
+                res.redirect("/delivery-fulfillment")
             } else {
                 console.log(`>>> DEBUG: order: ${order_number} update has failed, please, try again!`)
 
@@ -435,6 +434,62 @@ app.post("/assign-driver-to-order/:order_number", async (req, res) => {
 
         return res.render("header-template", {
             layout: "driver-orders",
+            message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
+        })
+    }
+})
+
+/* ########################################## */
+/* ### DRIVER FULFILLMENT ENDPOINTS ######### */
+/* ########################################## */
+
+/* --- GET FULFILLMENT --- */
+app.get("/delivery-fulfillment", ensureLogin, async (req, res) => { 
+    console.log(">>> DEBUG: this is delivery fulfillment page")
+
+    try {
+        //DB: IN_TRANSIT drive orders search 
+        const orders = await Order.find(
+            { 
+                order_status:"IN TRANSIT",
+                order_driver: req.session.username
+            }
+        ).lean().exec()
+
+        //ALERT: if orders not available
+        if (orders.length === 0) {
+            console.log(`>>> DEBUG: no available orders.`)
+
+            return res.render("header-template", {
+                layout: "driver-orders",
+                fullname: req.session.fullname,
+                phone: req.session.phone,
+                license_plate: req.session.license_plate,
+                vehicle_model: req.session.vehicle_model,
+                vehicle_color: req.session.vehicle_color,
+                username: req.session.username,
+                availableOrdersMessage: `<strong>ALERT:</strong> No available orders.`
+            })
+        } else {
+            console.log(`>>> DEBUG: this is delivery fulfillment`)
+
+            return res.render("header-template", {
+                layout: "delivery-fulfillment",
+                fullname: req.session.fullname,
+                phone: req.session.phone,
+                license_plate: req.session.license_plate,
+                vehicle_model: req.session.vehicle_model,
+                vehicle_color: req.session.vehicle_color,
+                username: req.session.username,
+                orders: orders
+            })
+        }
+    } catch (error) {
+        console.log(`>>> DEBUG: Error to to persist database: ${ACTIVE_DB}, please try again!`)
+        console.log(`>>> DEBUG: ERROR > ${error}`)
+
+        return res.render("header-template", {
+            layout: "delivery-fulfillment",
             message: `<strong>ERROR</strong> to to persist database: ${ACTIVE_DB}, please try again!` 
         })
     }
