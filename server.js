@@ -63,11 +63,6 @@ const mongoose = require("mongoose")
 const CONNECTION_STRING = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}.mongodb.net/${ACTIVE_DB}?retryWrites=true&w=majority`
 mongoose.connect(CONNECTION_STRING)
 
-// const mongoose = require('mongoose')
-// const { log } = require('console')
-// const CONNECTION_STRING = "mongodb+srv://quervolvh:eNCFrrrMIklQTJ2Q@t440-cluster.pgdxfdw.mongodb.net/t440-work?retryWrites=true&w=majority";
-// mongoose.connect(CONNECTION_STRING)
-
 /* --- CHECKING CONNECTION --- */
 const db = mongoose.connection
 db.on("error", console.error.bind(console, `>>> DEBUG: MongoDB - Error connecting to database: ${ACTIVE_DB}`))
