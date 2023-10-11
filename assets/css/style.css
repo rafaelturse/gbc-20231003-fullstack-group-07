@@ -214,6 +214,10 @@ input::placeholder {
 }
 
 /* --- PAGE --- */
+a {
+    text-decoration: none;
+}
+
 body {
     background-color: #040404;
     background-image: linear-gradient(#1c1c1c, #040404);

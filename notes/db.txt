@@ -94,7 +94,7 @@ DB - collections
         },
         {
             "order_number":"202305", 
-            "menu_item":"Pizza L", 
+            "menu_item":"Pizza S", 
             "order_date":"20231005", 
             "order_status":"READY FOR DELIVERY",
             "order_driver":"",
@@ -102,6 +102,14 @@ DB - collections
         },
         {
             "order_number":"202306", 
+            "menu_item":"Pizza L", 
+            "order_date":"20231005", 
+            "order_status":"READY FOR DELIVERY",
+            "order_driver":"",
+            "proof_photo":""
+        },
+        {
+            "order_number":"202307", 
             "menu_item":"Pizza M", 
             "order_date":"20231006", 
             "order_status":"READY FOR DELIVERY",

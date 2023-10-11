@@ -49,15 +49,24 @@ app.use(express.urlencoded({ extended: true }))
 /* ########################################## */
 
 /* --- ACCESS --- */
-const ACTIVE_DB = "gbc_restaurant_db"
-const USERNAME = "rafaelturse"
-const PASSWORD = "qBnX8Z0RH96IP8Sg"
+// const ACTIVE_DB = "gbc_restaurant_db"
+// const CLUSTER = "cluster0.h1rrj2i"
+// const USERNAME = "rafaelturse"
+// const PASSWORD = "qBnX8Z0RH96IP8Sg"
+const ACTIVE_DB = "t440-work"
+const CLUSTER = "t440-cluster.pgdxfdw"
+const USERNAME = "quervolvh"
+const PASSWORD = "eNCFrrrMIklQTJ2Q"
 
 /* --- CONNECTION STRING --- */
 const mongoose = require("mongoose")
-const { log } = require('console')
-const CONNECTION_STRING = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.h1rrj2i.mongodb.net/${ACTIVE_DB}?retryWrites=true&w=majority`
+const CONNECTION_STRING = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}.mongodb.net/${ACTIVE_DB}?retryWrites=true&w=majority`
 mongoose.connect(CONNECTION_STRING)
+
+// const mongoose = require('mongoose')
+// const { log } = require('console')
+// const CONNECTION_STRING = "mongodb+srv://quervolvh:eNCFrrrMIklQTJ2Q@t440-cluster.pgdxfdw.mongodb.net/t440-work?retryWrites=true&w=majority";
+// mongoose.connect(CONNECTION_STRING)
 
 /* --- CHECKING CONNECTION --- */
 const db = mongoose.connection
@@ -84,20 +93,71 @@ const driverSchema = new Schema({
 const Driver = mongoose.model("driver_collection", driverSchema)
 
 /* --- ORDER --- */
-const orderSchema = new Schema({
-    order_number:String, 
-    menu_item:String, 
-    order_date:String,
-    order_status:String,
-    order_driver:String,
-    proof_photo:String
+// const orderSchema = new Schema({
+//     order_number:String, 
+//     menu_item:String, 
+//     order_date:String,
+//     order_status:String,
+//     order_driver:String,
+//     proof_photo:String
+// })
+// const Order = mongoose.model("order_collection", orderSchema)
+const OrderItemSchema = mongoose.Schema({
+    menu_item: {
+        type: String,
+        required: true,
+    },
+    menu_item_id: {
+        type: String,
+        required: true,
+    },
+    order_number: {
+        type: String,
+        required: true,
+    },
+    order_ref: {
+        type: String,
+        required: true
+    },
+    order_status: {
+        type: String,
+        require: true,
+    },
+    order_date: {
+        type: String,
+        required: true
+    },
+    order_photo: {
+        type: String,
+        required: true
+    },
+    proof_photo: {
+        type: String
+    },
+    order_driver: {
+        type: String
+    },
+    order_price: {
+        type: Number,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    created_at: {
+        type: String,
+        required: true,
+        default: new Date()
+    }
 })
-const Order = mongoose.model("order_collection", orderSchema)
+const Order = mongoose.model('Order', OrderItemSchema)
 
 /* ########################################## */
 /* ### FUNCTIONS ############################ */
 /* ########################################## */
 
+/* --- CHECK FOR EMPTY VALUES --- */
 const checkEmpty = (value)  => {
     if (value !== undefined && value !== "") { return true }
     return false
@@ -116,8 +176,7 @@ const ensureLogin = (req, res, next) => {
         return res.render("header-template", {
             layout: "login",
             missingCredentialMessage: 
-                `<strong>Driver user not logged in!</strong> 
-                Please, make sure you are logged in before accessing the available orders.`
+                `<strong>Driver not logged in!</strong> Please, login before access the system.`
         })
     }
 }
@@ -326,7 +385,7 @@ app.post("/login", async (req, res) => {
     }
 })
 
-/* --- GET LOGOUT --- */
+/* --- LOGOUT --- */
 app.get("/logout", async (req, res) => {
     console.log(">>> DEBUG: successfully logged out.")
     req.session.destroy()
@@ -455,7 +514,7 @@ app.get("/delivery-fulfillment", ensureLogin, async (req, res) => {
 
         //ALERT: if orders not available
         if (orders.length === 0) {
-            console.log(`>>> DEBUG: no available orders.`)
+            console.log(`>>> DEBUG: no orders available.`)
 
             return res.render("header-template", {
                 layout: "delivery-fulfillment",
@@ -507,7 +566,6 @@ app.post(
     //if proof photo uploaded, then finalize order
     if (file === undefined){
         console.log(`>>> DEBUG: proof delivery photo not provided!`)
-        res.redirect("/delivery-fulfillment")
     } else {
         console.log(`>>> DEBUG: proof delivery photo successfully provided!`)
 
