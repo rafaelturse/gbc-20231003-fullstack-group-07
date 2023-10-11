@@ -1,0 +1,448 @@
+body {
+    margin: 0;
+    padding: 10px 0;
+    background: white;
+    color: black;
+    font-family: "Abel", sans-serif;
+}
+
+header {
+
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 100px 10px;
+
+}
+
+header ul {
+
+    display: flex;
+    gap: 20px;
+    list-style: none;
+ 
+}
+
+header li a {
+
+    font-size: 20px;
+    text-decoration: none;
+
+}
+
+header h2 {
+
+    font-size: 30px !important;
+    display: inline-flex;
+
+}
+
+header span {
+
+    color: red;
+
+}
+
+header img {
+
+    display: inline;
+    margin-top: -5px;
+    height: 40px;
+    width: 40px;
+
+}
+
+.welcome-section {
+
+    display: flex;
+    align-items: center;
+    background: black;
+    padding: 20px 100px;
+
+}
+
+.welcome-section img {
+
+    width: 30px;
+    height: 30px;
+
+}
+
+.welcome-section p {
+
+    margin: 0 20px;
+    font-size: 20px;
+    color: white;
+
+}
+
+.welcome-banner {
+
+    position: relative;
+    display: flex;
+    padding: 0;
+    padding-left: 0;
+    height: 350px;
+    width: 100%;
+
+}
+
+.welcome-banner img {
+
+    object-fit: cover;
+    width: 100%;
+    display: block;
+
+}
+
+.welcome-banner-overlay {
+
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    position: absolute;
+    padding-left: 100px;
+    background: rgba(19, 18, 18, 0.107);
+
+} 
+
+.welcome-banner-overlay h2 {
+
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 2px solid white;
+    padding: 20px;
+    width: max-content;
+    font-size: 35px;
+    color: white;
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.24);
+    transition: 0.2s ease;
+    cursor: pointer;
+
+}
+
+.welcome-banner-overlay h2:hover {
+
+    color: black;
+    background: white;
+
+}
+
+.restaurant-details {
+
+    display: flex;
+    gap: 20px;
+    padding-top: 20px;
+    padding-left: 100px;
+
+}
+
+.restaurant-details-location img {
+
+    margin-bottom: 20px;
+    width: 50px;
+    height: 50px;
+
+}
+
+.restaurant-details-location h2 {
+
+    font-size: 16px;
+
+}
+
+.restaurant-details-location {
+
+    margin-top: 10px;
+    padding: 20px;
+    background: rgba(245, 21, 21, 0.026);
+    width: 300px;
+    border-radius: 15px;
+
+}
+
+.restaurant-details-location-city {
+
+    color: rgb(244, 4, 4);
+
+}
+
+main {
+
+    padding: 20px 100px 0;
+
+}
+
+main h1 {
+
+    width: 140px;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 15px;
+    padding-left: 25px;
+    border-bottom: 2px solid transparent;
+    transition: 0.2s ease;
+
+}
+
+main h1.active {
+
+    border-bottom: 2px solid black;
+
+}
+
+.menu-listing {
+
+    display: flex;
+
+}
+
+.menu-item {
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    padding: 20px;
+    width: 800px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    overflow: hidden;
+
+}
+
+.linear-border {
+
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    left: 0;
+    width: 100%;
+    background: black;
+
+}
+
+.menu-item div {
+
+    display: flex;
+    align-items: center;
+
+}
+
+.menu-item div p {
+
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+.menu-item-img {
+
+    display: block;
+    margin-right: 10px;
+    object-fit: contain;
+    border-radius: 18px;
+    height: 150px;
+    width: 150px;
+
+}
+
+.menu-item-button {
+
+    cursor: pointer;
+    text-align: center;
+    padding: 5px 10px;
+
+}
+
+.menu-item-plus {
+
+    margin-left: 20px;
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: 15px;
+    height: 15px;
+    background: red;
+    color: white;
+
+}
+
+.linear-loading {
+
+    background: red;
+    height: 3px;
+    animation-name: linear-loader-anim;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+}
+
+@keyframes linear-loader-anim {
+    
+    from {
+
+        width: 80%;
+        left: 0;
+
+    }
+
+    to {
+
+        width: 80%;
+        left: 100%;
+
+    }
+
+}
+
+.order-creation {
+
+    display: flex;
+    align-items: flex-end;
+    position: fixed;
+    bottom: -120vh;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background: rgba(18, 12, 12, 0.315);
+    transition: 0.2s ease;
+
+}
+
+.show-order-creation {
+
+    bottom: 0;
+
+}
+
+.order-creation div {
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 6px;
+    width: 100vw;
+    padding: 40px 20px 20px;
+
+}
+
+.order-creation img {
+
+    display: block;
+    margin: auto;
+    width: 200px;
+    height: 200px;
+
+
+}
+
+button {
+
+    display: block;
+    cursor: pointer;
+    border: 2px solid;
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    width: 200px;
+
+}
+
+.order-creation button {
+
+    margin: 20px 0;
+
+}
+
+.order-items-view h2 {
+
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    width: 400px;
+
+}
+
+.order-items-view {
+
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    min-height: 500px;
+    width: 520px;
+    padding: 40px 30px;
+
+}
+
+.order-items-view img {
+
+    display: block;
+    padding: 40px;
+    background: black;
+    border-radius: 18px;
+    height: 70px;
+    width: 70px;
+
+}
+
+.order-items-view button {
+
+    padding: 18px 20px;
+    margin-top: 20px;
+    margin-top: 30px;
+
+}
+
+.order-items-view input {
+
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid;
+    width: 500px;
+
+}
+
+.hide-view {
+
+    display: none;
+
+}
+
+#form-order-item-image {
+
+    border-radius: 18px;
+    background: rgba(70, 5, 5, 0.543);
+
+}
+
+.order-form-dismiss {
+
+    margin-top: 0 !important;
+    border: 0;
+    color: red;
+
+}
+
+.form-loader {
+
+    position: absolute;
+    bottom: 0;
+
+}
+
+.error-input {
+
+    border: 3px solid red !important;
+
+}
+
+.error-input::placeholder {
+
+    color: red;
+
+}

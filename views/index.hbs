@@ -1,0 +1,103 @@
+<main>
+
+    <div>
+
+        <div class="menu-listing">
+
+            <h1 onclick="switchView('menu')" id="menu-button" class="active"> Menu </h1>
+
+            <h1 onclick="switchView('orders')" id="orders-button"> Orders </h1>
+
+        </div>
+
+        <div id="menu-items-view">
+        
+            {{#each items}}
+
+                <div class="menu-item">
+
+                    <div>
+
+                        <img class="menu-item-img" src="{{this.photo}}" alt="{{this.name}}" />
+
+                        <p> {{this.name}} </p>
+
+                    </div>
+
+                    <span 
+                    
+                        class="menu-item-button"
+                    
+                        onclick="showOrderForm('{{this.name}}','{{this.price}}','{{this._id}}', '{{this.photo}}', '{{@index}}')"
+                    
+                    >
+
+                        {{!-- <span class="rotate" id="rotate-{{@index}}"></span> --}}
+
+                        <p> ${{this.price}}.00 <span class="menu-item-plus">+</span> </p>
+
+                    </span>
+
+                    <div id="linear-{{@index}}" class="linear-border"></div>
+
+                </div>
+
+            {{/each}}
+
+        </div>
+
+        <div id="order-items-view" class="order-items-view hide-view">
+
+            <img src="img/cart-shopping-ecommerce-shop-svgrepo-com.svg" />
+
+            <h2 id="order-items-view-intro"> Placed an order recently ? Input your order reference to view your order status </h2>
+
+            <div id="order-items-view-input-box">
+
+                <input id="order-item-view-input" type="text" placeholder="Enter Order Reference" />
+
+                <button onclick="findOrder()"> Check Order </button>
+
+            </div>
+
+            <div id="order-items-view-summary" class="hide-view"></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<section class="order-creation" id="order-creation">
+
+    <div>
+
+        <img src="img/success-achievement-award-medal-winner-svgrepo-com.svg" />
+
+        <h2> Your order has been created </h2>
+
+        <h3 id="order-creation-number"></h3>
+
+        <p> Please copy your order number </p>
+
+        <button onclick="dismissOrderCreationTab()"> Close </button>
+
+    </div>
+
+</section>
+
+<section class="order-creation" id="order-creation-form">
+
+    <div id="order-creation-form-div">
+
+        <span id="form-loader" class="form-loader"> </span>
+
+        <h2> Create single order </h2>
+
+        <img id="form-order-item-image"/>
+
+        <h3 id="form-order-item-name"> Item: <span style="color: red;font-weight: 600; font-size: 25px;"> Crispy Donut </span> </h3>
+
+    </div>
+
+</section>
