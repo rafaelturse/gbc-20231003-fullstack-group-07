@@ -323,11 +323,12 @@ main h1.active {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     background: white;
     border-radius: 6px;
     width: 100vw;
     padding: 40px 20px 20px;
+    max-height: 80vh;
+    overflow-y: scroll;
 
 }
 
@@ -457,9 +458,11 @@ button {
 .form-order-item-address-input {
 
     margin-bottom: 10px;
-    height: 200px;
+    height: 150px;
+    max-height: 150px;
+    min-height: 150px;
     width: 304px;
-    border-radius: 15px;
+    border-radius: 10px;
     border: 2px solid black;
     padding: 20px;
 
@@ -467,7 +470,8 @@ button {
 
 .form-order-item-address-name {
 
-    height: 70px;
+    height: 50px;
+    min-height: 50px;
 
 }
 

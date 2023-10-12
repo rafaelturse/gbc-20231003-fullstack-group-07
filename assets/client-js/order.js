@@ -54,8 +54,41 @@ const dismissOrderForm = async (menuItemId) => {
 
 const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
 
-    dismissOrderFormButtons();
+    const successScreen = document.getElementById("order-creation");
 
+    const orderNumberElement = document.getElementById("order-creation-number");
+
+    const orderAddressElement = document.getElementById("form-order-item-address-input");
+
+    const customerNameElement = document.getElementById("form-order-item-address-name");
+
+    if ( !customerNameElement?.value || customerNameElement?.value?.length < 2 ) {
+
+        customerNameElement.classList.add("error-input");
+
+        customerNameElement.value = "";
+
+        customerNameElement.placeholder = "Please fill with proper name and address";
+        
+        return;
+
+    }
+
+    if ( !orderAddressElement?.value || orderAddressElement?.value?.length < 2  ) {
+
+        customerNameElement.placeholder = "Please fill with proper name and address";
+
+        customerNameElement.value = "";
+
+        orderAddressElement.classList.add("error-input");
+
+        return;
+
+    }
+
+    dismissOrderFormButtons();
+    
+    
     const formLoaderItem = document.getElementById("form-loader");
 
     formLoaderItem.classList.add("linear-loading");
@@ -64,13 +97,10 @@ const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
 
     menuLoaderItem.classList.remove("linear-loading");
 
-    const successScreen = document.getElementById("order-creation");
 
-    const orderNumberElement = document.getElementById("order-creation-number");
+    customerNameElement.classList.remove("error-input");
 
-    const orderAddressElement = document.getElementById("form-order-item-address-input");
-
-    const customerNameElement = document.getElementById("form-order-item-address-name");
+    orderAddressElement.classList.remove("error-input");
 
     setTimeout(() => {
 
