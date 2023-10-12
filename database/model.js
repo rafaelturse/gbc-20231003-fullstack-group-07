@@ -39,6 +39,11 @@ const OrderItemSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    customer_name: {
+        type: String,
+        require: true,
+        default: ""
+    },
     order_date: {
         type: String,
         required: true
@@ -47,12 +52,25 @@ const OrderItemSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    proof_photo: {
+        type: String
+    },
     order_driver: {
         type: String
+    },
+    driver_fullname: {
+        type: String,
+    },
+    driver_license_plate: {
+        type: String,
     },
     order_price: {
         type: Number,
         required: true
+    },
+    address: {
+        type: String,
+        required: true,
     },
     created_at: {
         type: String,

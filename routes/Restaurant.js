@@ -61,8 +61,6 @@ RestaurantRouter.post('/', async (req, res) => {
 
 		let latestOrder = await Order.find().sort( [['_id', -1]]).limit(1).lean().exec();
 
-		console.log(latestOrder);
-
 		latestOrder = latestOrder?.[0];
 
 		const orderNumber = latestOrder?.order_number ? Number(latestOrder?.order_number) + 1 : 1;
@@ -75,7 +73,7 @@ RestaurantRouter.post('/', async (req, res) => {
 
 			order_number: orderNumber,
 
-			order_status: "READY FOR DELIVERY",
+			order_status: "RECEIVED",
 
 			order_ref: "ORDER-" + String(orderNumber) + Math.floor(new Date().valueOf() * Math.random()),
 
@@ -83,9 +81,21 @@ RestaurantRouter.post('/', async (req, res) => {
 
 			order_photo: req.body.photo,
 
-			order_price: req.body.price
+			order_price: req.body.price,
+
+			order_driver: "",
+
+			address: req.body.orderAddress,
+
+			customer_name: req.body.customerName,
+
+			driver_fullname: "",
+
+			driver_license_plate: ""
 
 		};
+
+		console.log(orderDetails);
 
 		const order = new Order(orderDetails);
 
@@ -93,7 +103,9 @@ RestaurantRouter.post('/', async (req, res) => {
 		
 		res.status(200).send({ success: true, data: newOrder });
 
-	} catch {
+	} catch (e){
+
+		console.log(e);
 
 		res.status(400).send({ success: false, message: 'false' });
 

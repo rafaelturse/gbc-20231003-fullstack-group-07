@@ -446,3 +446,33 @@ button {
     color: red;
 
 }
+
+.form-order-item-address-label {
+
+    font-size: 20px;
+
+}
+
+.form-order-item-address-name,
+.form-order-item-address-input {
+
+    margin-bottom: 10px;
+    height: 200px;
+    width: 304px;
+    border-radius: 15px;
+    border: 2px solid black;
+    padding: 20px;
+
+}
+
+.form-order-item-address-name {
+
+    height: 70px;
+
+}
+
+textarea::placeholder {
+
+    color: red;
+
+}

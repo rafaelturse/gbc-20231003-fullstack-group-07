@@ -68,6 +68,10 @@ const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
 
     const orderNumberElement = document.getElementById("order-creation-number");
 
+    const orderAddressElement = document.getElementById("form-order-item-address-input");
+
+    const customerNameElement = document.getElementById("form-order-item-address-name");
+
     setTimeout(() => {
 
         fetch("/", {
@@ -80,7 +84,21 @@ const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
 
             },
 
-            body: JSON.stringify({ name, price, menuItemId, photo })
+            body: JSON.stringify({ 
+                
+                name, 
+                
+                price, 
+                
+                menuItemId, 
+                
+                photo, 
+                
+                orderAddress : orderAddressElement?.value || "Number 5 , Down The Drain",
+                
+                customerName: customerNameElement.value || "James Dean",
+            
+            })
 
         })
 
@@ -93,6 +111,8 @@ const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
                 formLoaderItem.classList.remove("linear-loading");
 
                 successScreen.classList.add("show-order-creation");
+
+                orderAddressElement.value = "";
 
                 orderNumberElement.innerText = data?.data?.order_ref;
 
