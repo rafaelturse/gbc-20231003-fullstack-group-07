@@ -48,11 +48,13 @@ app.use(express.urlencoded({ extended: true }))
 /* ### DB ################################### */
 /* ########################################## */
 
-/* --- ACCESS --- */
+/* --- ACCESS (from rafael turse) --- */
 // const ACTIVE_DB = "gbc_restaurant_db"
 // const CLUSTER = "cluster0.h1rrj2i"
 // const USERNAME = "rafaelturse"
 // const PASSWORD = "qBnX8Z0RH96IP8Sg"
+
+/* --- ACCESS (from Awwal Adeyemi) --- */
 const ACTIVE_DB = "t440-work"
 const CLUSTER = "t440-cluster.pgdxfdw"
 const USERNAME = "quervolvh"
@@ -87,16 +89,20 @@ const driverSchema = new Schema({
 })
 const Driver = mongoose.model("driver_collection", driverSchema)
 
-/* --- ORDER --- */
+/* --- ORDER (from rafael turse) --- */
 // const orderSchema = new Schema({
 //     order_number:String, 
 //     menu_item:String, 
 //     order_date:String,
 //     order_status:String,
 //     order_driver:String,
-//     proof_photo:String
+//     proof_photo:String,
+//     driver_fullname: String,
+//     driver_license_plate: String
 // })
 // const Order = mongoose.model("order_collection", orderSchema)
+
+/* --- ORDER (from Awwal Adeyemi) --- */
 const OrderItemSchema = mongoose.Schema({
     menu_item: {
         type: String,
@@ -144,9 +150,63 @@ const OrderItemSchema = mongoose.Schema({
         type: String,
         required: true,
         default: new Date()
+    },
+    driver_fullname: {
+        type: String,
+        required: true,
+    },
+    driver_license_plate: {
+        type: String,
+        required: true,
     }
 })
 const Order = mongoose.model('Order', OrderItemSchema)
+
+/* ########################################## */
+/* ### TESTING DB ENDPOINTS ################# */
+/* ########################################## */
+
+app.get(`/testing-get-orders`, async (req, res) => {
+    console.log(">>> DEBUG: this is orders' collection")
+
+    results = await Order.find().lean().exec()
+
+    console.log(`>>> DEBUG: ${JSON.stringify(results)}`)
+    console.log(results)
+
+    res.send(results)
+})
+
+app.get(`/testing-get-drivers`, async (req, res) => {
+    console.log(">>> DEBUG: this is drivers' collection")
+
+    results = await Driver.find().lean().exec()
+
+    console.log(`>>> DEBUG: ${JSON.stringify(results)}`)
+    console.log(results)
+
+    res.send(results)
+})
+
+app.get(`/testing-update-order/:order_number`, async (req, res) => {
+    console.log(">>> DEBUG: updating order")
+
+    try {
+        const order = await Order.findOne({ order_number:req.params.order_number })
+
+        const values = { 
+            order_status:"READY FOR DELIVERY",
+            proof_photo:"",
+            driver_fullname: req.session.fullname,
+            driver_license_plate: req.session.license_plate
+        }
+
+        const result = await order.updateOne(values)
+
+    } catch (e) { console.log(`>>> DEBUG: ${e}`) }
+
+    res.send("")
+})
 
 /* ########################################## */
 /* ### FUNCTIONS ############################ */
@@ -175,32 +235,6 @@ const ensureLogin = (req, res, next) => {
         })
     }
 }
-
-/* ########################################## */
-/* ### TESTING DB ENDPOINTS ################# */
-/* ########################################## */
-
-app.get(`/testing-get-orders`, async (req, res) => {
-    console.log(">>> DEBUG: this is orders' collection")
-
-    results = await Order.find().lean().exec()
-
-    console.log(`>>> DEBUG: ${JSON.stringify(results)}`)
-    console.log(results)
-
-    res.send("")
-})
-
-app.get(`/testing-get-drivers`, async (req, res) => {
-    console.log(">>> DEBUG: this is drivers' collection")
-
-    results = await Driver.find().lean().exec()
-
-    console.log(`>>> DEBUG: ${JSON.stringify(results)}`)
-    console.log(results)
-
-    res.send("")
-})
 
 /* ########################################## */
 /* ### SIGN-UP ENDPOINTS #################### */
@@ -574,11 +608,13 @@ app.post(
                 res.redirect("/delivery-fulfillment")
             } else {
                 console.log(`>>> DEBUG: order: ${order_number}, found.`)
-    
+
                 //set update values
                 const updatedValues = { 
                     order_status:"DELIVERED",
-                    proof_photo:file.filename 
+                    proof_photo:file.filename,
+                    driver_fullname: req.session.fullname,
+                    driver_license_plate: req.session.license_plate
                 }
     
                 //finalizing order

@@ -51,7 +51,8 @@
             <div class="alert-message describe text-center">{{{availableOrdersMessage}}}</div>
           {{else}}
             {{#each orders}}
-              <form class="form-task" action="/delivery-fulfillment/{{this.order_number}}" method="post" enctype="multipart/form-data">
+              <form class="form-task" action="/delivery-fulfillment/{{this.order_number}}" 
+                method="post" enctype="multipart/form-data">
                 <tr class="tr-order-info describe">
                   <td class="table-text text-center">{{this.order_number}}</td>
                   <td class="table-text">{{this.menu_item}}</td>
