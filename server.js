@@ -20,7 +20,6 @@ const myStorage = multer.diskStorage({
         cb(null , `${Date.now()}-driver${path.extname(file.originalname)}`)
     }
 })
-
 const upload = multer({storage: myStorage})
 
 /* --- SESSION --- */
@@ -202,7 +201,6 @@ app.get(`/testing-update-order/:order_number`, async (req, res) => {
         }
 
         const result = await order.updateOne(values)
-
     } catch (e) { console.log(`>>> DEBUG: ${e}`) }
 
     res.send("")
@@ -341,7 +339,6 @@ app.get("/", (req, res) => {
 /* --- GET LOGIN --- */
 app.get("/login", (req, res) => {
     console.log(">>> DEBUG: this is driver login page")
-
     res.render("header-template", { layout:"login" })
 })
 
@@ -505,11 +502,9 @@ app.post("/assign-driver-to-order/:order_number", async (req, res) => {
 
             if (result !== null) {
                 console.log(`>>> DEBUG: order: ${order_number}, assigned to driver: ${req.session.username}`)
-    
                 res.redirect("/delivery-fulfillment")
             } else {
                 console.log(`>>> DEBUG: order: ${order_number} update has failed, please, try again!`)
-
                 res.redirect("/driver-orders")
             }
         }
