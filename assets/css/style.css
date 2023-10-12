@@ -450,7 +450,7 @@ button {
 
 .form-order-item-address-label {
 
-    font-size: 20px;
+    font-size: 17px;
 
 }
 
@@ -465,6 +465,7 @@ button {
     border-radius: 10px;
     border: 2px solid black;
     padding: 20px;
+    font-family: "Abel", sans-serif;
 
 }
 
@@ -472,11 +473,5 @@ button {
 
     height: 50px;
     min-height: 50px;
-
-}
-
-textarea::placeholder {
-
-    color: red;
 
 }

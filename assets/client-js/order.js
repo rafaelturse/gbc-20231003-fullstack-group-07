@@ -1,4 +1,12 @@
+const createSpecialOrder = () => {
+
+    showOrderForm("Special Donut Platter" , 70, "65231c789fe67ed72c463176", "img/specials-donut-platter.png", "0");
+    
+}
+
 const showOrderForm = async (name, price, menuItemId, photo, menuDomRef) => {
+
+    console.log(name, price, menuItemId ,photo , menuDomRef);
 
     const menuLoaderItem = document.getElementById("linear-" + menuDomRef);
 
@@ -68,23 +76,27 @@ const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
 
         customerNameElement.value = "";
 
-        customerNameElement.placeholder = "Please fill with proper name and address";
+        customerNameElement.placeholder = "Please fill with proper name";
         
         return;
 
     }
 
+    customerNameElement.classList.remove("error-input");
+
     if ( !orderAddressElement?.value || orderAddressElement?.value?.length < 2  ) {
 
-        customerNameElement.placeholder = "Please fill with proper name and address";
+        orderAddressElement.placeholder = "Please fill with proper address";
 
-        customerNameElement.value = "";
+        orderAddressElement.value = "";
 
         orderAddressElement.classList.add("error-input");
 
         return;
 
     }
+
+    orderAddressElement.classList.remove("error-input");
 
     dismissOrderFormButtons();
     
@@ -97,10 +109,6 @@ const createOrder = async (name, price, menuItemId, photo, menuDomRef) => {
 
     menuLoaderItem.classList.remove("linear-loading");
 
-
-    customerNameElement.classList.remove("error-input");
-
-    orderAddressElement.classList.remove("error-input");
 
     setTimeout(() => {
 
@@ -164,40 +172,6 @@ const dismissOrderCreationTab = async () => {
 }
 
 const switchView = (view) => {
-
-    const menuView = document.getElementById("menu-items-view");
-
-    const orderView = document.getElementById("order-items-view");
-
-    const menuViewButton = document.getElementById("menu-button");
-
-    const ordersViewButton = document.getElementById("orders-button");
-
-    if (view === "orders") {
-
-        menuView.classList.add("hide-view");
-
-        orderView.classList.remove("hide-view");
-
-        menuViewButton.classList.remove("active");
-
-        ordersViewButton.classList.add("active");
-
-        return;
-
-    }
-
-    menuView.classList.remove("hide-view");
-
-    orderView.classList.add("hide-view");
-
-    menuViewButton.classList.add("active");
-
-    ordersViewButton.classList.remove("active");
-
-}
-
-const checkOrder = (view) => {
 
     const menuView = document.getElementById("menu-items-view");
 
