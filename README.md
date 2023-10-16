@@ -7,10 +7,6 @@
 - The whole project is about a restaurant, where is possible to order, manage the order and manage the delivery
 - This is my end, a delivery app for logged drivers assign orders from a restaurant.
 
-<br>
-<br>
-
-
 # GIT Flow
 - Never work directly at the **MAIN** branch
 - Use a branch in your name and work only on it
