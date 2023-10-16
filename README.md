@@ -5,7 +5,7 @@
 # GBC Driver
 - In this project I built an fullstack app using **Node** + **Express** + **Handlebars** + **HTML** + **CSS** + **Javascript** 
 - The whole project is about a restaurant, where is possible to order, manage the order and manage the delivery
-- This is my end, a delivery app for logged drivers assign orders from a restaurant.
+- This is my end, a delivery app for logged drivers assign orders from the restaurant.
 
 # GIT Flow
 - Never work directly at the **MAIN** branch
